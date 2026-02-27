@@ -122,7 +122,6 @@ export default function App() {
 }
 
 // ===== STYLES =====
- // ===========3 EN RAYA INICIO =============
 function TicTacToe() {
   const [board, setBoard] = useState<(string | null)[]>(Array(9).fill(null));
   const [winner, setWinner] = useState<string | null>(null);
@@ -268,71 +267,9 @@ function TicTacToe() {
   // ========================
   // PANTALLA DE DIFICULTAD
   // ========================
-if (!difficulty) {
-  return (
-    <div style={{ 
-      textAlign: "center",
-      background: "#15151d",
-      padding: "30px",
-      borderRadius: "15px"
-    }}>
-      <h3 style={{ marginBottom: "20px" }}>Elige dificultad</h3>
-
-      <div>
-        <button
-          onClick={() => setDifficulty("easy")}
-          style={{
-            background: "#ff003c",
-            border: "2px solid #ff003c",
-            color: "white",
-            padding: "12px 25px",
-            margin: "8px",
-            borderRadius: "10px",
-            cursor: "pointer",
-            boxShadow: "0 0 15px #ff003c, 0 0 30px #ff003c",
-            fontWeight: "bold"
-          }}
-        >
-          🟢 Fácil
-        </button>
-
-        <button
-          onClick={() => setDifficulty("medium")}
-          style={{
-            background: "#ff003c",
-            border: "2px solid #ff003c",
-            color: "white",
-            padding: "12px 25px",
-            margin: "8px",
-            borderRadius: "10px",
-            cursor: "pointer",
-            boxShadow: "0 0 15px #ff003c, 0 0 30px #ff003c",
-            fontWeight: "bold"
-          }}
-        >
-          🟡 Medio
-        </button>
-
-        <button
-          onClick={() => setDifficulty("hard")}
-          style={{
-            background: "#ff003c",
-            border: "2px solid #ff003c",
-            color: "white",
-            padding: "12px 25px",
-            margin: "8px",
-            borderRadius: "10px",
-            cursor: "pointer",
-            boxShadow: "0 0 15px #ff003c, 0 0 30px #ff003c",
-            fontWeight: "bold"
-          }}
-        >
-          🔴 Imposible
-        </button>
-      </div>
-    </div>
-  );
-}
+  if (!difficulty) {
+    return (
+      <div style={{ textAlign: "center" }}>
         <h3>Elige dificultad</h3>
         <button onClick={() => setDifficulty("easy")}>🟢 Fácil</button>
         <button onClick={() => setDifficulty("medium")} style={{ margin: "0 10px" }}>🟡 Medio</button>
@@ -381,22 +318,7 @@ if (!difficulty) {
         ))}
       </div>
 
-      <button
-  onClick={resetGame}
-  style={{
-    background: "#ff003c",
-    border: "2px solid #ff003c",
-    color: "white",
-    padding: "10px 20px",
-    borderRadius: "8px",
-    cursor: "pointer",
-    boxShadow: "0 0 15px #ff003c, 0 0 30px #ff003c",
-    fontWeight: "bold",
-    marginTop: "15px"
-  }}
->
-  Cambiar dificultad
-</button>
+      <button onClick={resetGame}>Cambiar dificultad</button>
     </div>
   );
 }
@@ -415,7 +337,6 @@ function calculateWinner(board: (string | null)[]) {
   }
   return null;
 }
-// ===========3 EN RAYA FIN =============
 const styles: Record<string, React.CSSProperties> = {
   body: {
     fontFamily: "'Rajdhani', sans-serif",
