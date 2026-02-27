@@ -122,9 +122,7 @@ export default function App() {
 }
 
 // ===== STYLES =====
-// 👇 CODIGO 3 EN RAYA INCIO
-import { useState } from "react";
-
+// ✅ INICIO DE 3 EN RAYA
 function TicTacToe() {
   const [board, setBoard] = useState<(string | null)[]>(Array(9).fill(null));
   const [winner, setWinner] = useState<string | null>(null);
@@ -158,18 +156,25 @@ function TicTacToe() {
   function botMove(currentBoard: (string | null)[]) {
     if (!difficulty) return;
 
-    if (difficulty === "easy") randomMove(currentBoard);
-    else if (difficulty === "medium") smartMove(currentBoard);
-    else bestMove(currentBoard);
+    if (difficulty === "easy") {
+      randomMove(currentBoard);
+    } 
+    else if (difficulty === "medium") {
+      smartMove(currentBoard);
+    } 
+    else {
+      bestMove(currentBoard); // minimax
+    }
   }
 
+  // 🟢 EASY
   function randomMove(currentBoard: (string | null)[]) {
     const empty = getEmpty(currentBoard);
-    if (empty.length === 0) return;
     const randomIndex = empty[Math.floor(Math.random() * empty.length)];
     placeBot(currentBoard, randomIndex);
   }
 
+  // 🟡 MEDIUM
   function smartMove(currentBoard: (string | null)[]) {
     const empty = getEmpty(currentBoard);
 
@@ -196,6 +201,7 @@ function TicTacToe() {
     randomMove(currentBoard);
   }
 
+  // 🔴 HARD (Minimax)
   function bestMove(currentBoard: (string | null)[]) {
     let bestScore = -Infinity;
     let move = -1;
@@ -210,17 +216,16 @@ function TicTacToe() {
       }
     }
 
-    if (move !== -1) placeBot(currentBoard, move);
+    placeBot(currentBoard, move);
   }
 
-  function minimax(board: (string | null)[], depth: number, isMax: boolean): number {
+  function minimax(board: (string | null)[], depth: number, isMaximizing: boolean): number {
     const result = calculateWinner(board);
-
     if (result === bot) return 10 - depth;
     if (result === player) return depth - 10;
     if (getEmpty(board).length === 0) return 0;
 
-    if (isMax) {
+    if (isMaximizing) {
       let bestScore = -Infinity;
       for (let i of getEmpty(board)) {
         const test = [...board];
@@ -251,7 +256,7 @@ function TicTacToe() {
   function getEmpty(board: (string | null)[]) {
     return board
       .map((v, i) => (v === null ? i : null))
-      .filter((v) => v !== null) as number[];
+      .filter(v => v !== null) as number[];
   }
 
   function resetGame() {
@@ -261,48 +266,19 @@ function TicTacToe() {
   }
 
   // ========================
-  // ESTILO BOTÓN NEÓN
-  // ========================
-  const neonStyle: React.CSSProperties = {
-    background: "#ff003c",
-    color: "white",
-    border: "none",
-    padding: "12px 20px",
-    borderRadius: "12px",
-    boxShadow: "0 0 10px #ff003c, 0 0 20px #ff003c",
-    cursor: "pointer",
-    fontWeight: "bold"
-  };
-
-  // ========================
   // PANTALLA DE DIFICULTAD
   // ========================
   if (!difficulty) {
     return (
       <div style={{ textAlign: "center" }}>
         <h3>Elige dificultad</h3>
-
-        <button onClick={() => setDifficulty("easy")} style={neonStyle}>
-          🟢 Fácil
-        </button>
-
-        <button
-          onClick={() => setDifficulty("medium")}
-          style={{ ...neonStyle, margin: "0 10px" }}
-        >
-          🟡 Medio
-        </button>
-
-        <button onClick={() => setDifficulty("hard")} style={neonStyle}>
-          🔴 Imposible
-        </button>
+        <button onClick={() => setDifficulty("easy")}>🟢 Fácil</button>
+        <button onClick={() => setDifficulty("medium")} style={{ margin: "0 10px" }}>🟡 Medio</button>
+        <button onClick={() => setDifficulty("hard")}>🔴 Imposible</button>
       </div>
     );
   }
 
-  // ========================
-  // JUEGO
-  // ========================
   return (
     <div style={{ textAlign: "center" }}>
       <h3>
@@ -313,15 +289,13 @@ function TicTacToe() {
           : "Tu turno (X)"}
       </h3>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 100px)",
-          gap: "12px",
-          justifyContent: "center",
-          margin: "20px 0"
-        }}
-      >
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 100px)",
+        gap: "12px",
+        justifyContent: "center",
+        margin: "20px 0"
+      }}>
         {board.map((cell, i) => (
           <div
             key={i}
@@ -345,9 +319,7 @@ function TicTacToe() {
         ))}
       </div>
 
-      <button onClick={resetGame} style={neonStyle}>
-        Cambiar dificultad
-      </button>
+      <button onClick={resetGame}>Cambiar dificultad</button>
     </div>
   );
 }
@@ -366,10 +338,7 @@ function calculateWinner(board: (string | null)[]) {
   }
   return null;
 }
-
-export default TicTacToe;
-}
-//☝️ CODIGO 3 EN RAYA FIN
+// ✅ FIN DE 3 EN RAYA
 const styles: Record<string, React.CSSProperties> = {
   body: {
     fontFamily: "'Rajdhani', sans-serif",
