@@ -122,6 +122,7 @@ export default function App() {
 }
 
 // ===== STYLES =====
+// 👇 CODIGO 3 EN RAYA INCIO
 function TicTacToe() {
   const [board, setBoard] = useState<(string | null)[]>(Array(9).fill(null));
   const [winner, setWinner] = useState<string | null>(null);
@@ -269,14 +270,59 @@ function TicTacToe() {
   // ========================
   if (!difficulty) {
     return (
-      <div style={{ textAlign: "center" }}>
-        <h3>Elige dificultad</h3>
-        <button onClick={() => setDifficulty("easy")}>🟢 Fácil</button>
-        <button onClick={() => setDifficulty("medium")} style={{ margin: "0 10px" }}>🟡 Medio</button>
-        <button onClick={() => setDifficulty("hard")}>🔴 Imposible</button>
-      </div>
-    );
-  }
+if (!difficulty) {
+  return (
+    <div style={{ textAlign: "center" }}>
+      <h3>Elige dificultad</h3>
+
+      <button 
+        onClick={() => setDifficulty("easy")}
+        style={{
+          background: "#ff003c",
+          color: "white",
+          border: "none",
+          padding: "12px 20px",
+          borderRadius: "12px",
+          boxShadow: "0 0 10px #ff003c, 0 0 20px #ff003c",
+          cursor: "pointer"
+        }}
+      >
+        🟢 Fácil
+      </button>
+
+      <button 
+        onClick={() => setDifficulty("medium")}
+        style={{
+          background: "#ff003c",
+          color: "white",
+          border: "none",
+          padding: "12px 20px",
+          borderRadius: "12px",
+          boxShadow: "0 0 10px #ff003c, 0 0 20px #ff003c",
+          margin: "0 10px",
+          cursor: "pointer"
+        }}
+      >
+        🟡 Medio
+      </button>
+
+      <button 
+        onClick={() => setDifficulty("hard")}
+        style={{
+          background: "#ff003c",
+          color: "white",
+          border: "none",
+          padding: "12px 20px",
+          borderRadius: "12px",
+          boxShadow: "0 0 10px #ff003c, 0 0 20px #ff003c",
+          cursor: "pointer"
+        }}
+      >
+        🔴 Imposible
+      </button>
+    </div>
+  );
+}
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -318,7 +364,20 @@ function TicTacToe() {
         ))}
       </div>
 
-      <button onClick={resetGame}>Cambiar dificultad</button>
+      <button 
+  onClick={resetGame}
+  style={{
+    background: "#ff003c",
+    color: "white",
+    border: "none",
+    padding: "12px 20px",
+    borderRadius: "12px",
+    boxShadow: "0 0 10px #ff003c, 0 0 20px #ff003c",
+    cursor: "pointer"
+  }}
+>
+  Cambiar dificultad
+</button>
     </div>
   );
 }
@@ -337,6 +396,7 @@ function calculateWinner(board: (string | null)[]) {
   }
   return null;
 }
+//☝️ CODIGO 3 EN RAYA FIN
 const styles: Record<string, React.CSSProperties> = {
   body: {
     fontFamily: "'Rajdhani', sans-serif",
