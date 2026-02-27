@@ -16,6 +16,9 @@ export default function App() {
     { id: 'memory', name: 'Memoria', icon: '🧠', category: 'puzzle', tag: 'Puzzle', players: '8K', desc: 'Encuentra las parejas de cartas iguales.' },
     { id: 'tictactoe', name: 'Tres en Raya', icon: '❌', category: 'estrategia', tag: 'Estrategia', players: '15K', desc: 'Clásico tres en raya contra la máquina.' },
     { id: 'breakout', name: 'Breakout', icon: '🎯', category: 'arcade', tag: 'Arcade', players: '9K', desc: 'Destruye los bloques con la pelota.' },
+    { id: 'flappy', name: 'Flappy Bird', icon: '🐦', category: 'arcade', tag: 'Arcade', players: '20K', desc: 'Evita los tubos y sobrevive.' },
+    { id: 'sudoku', name: 'Sudoku', icon: '🔢', category: 'puzzle', tag: 'Puzzle', players: '11K', desc: 'Completa la cuadrícula sin repetir números.' },
+    { id: 'chess', name: 'Ajedrez', icon: '♟️', category: 'estrategia', tag: 'Estrategia', players: '18K', desc: 'Derrota a tu oponente con estrategia.' },
   ]);
 
   const [category, setCategory] = useState("todos");
