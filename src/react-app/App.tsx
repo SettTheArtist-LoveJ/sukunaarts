@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import ChessGame from "./ChessGame";
 import TicTacToe from "./TicTacToe";
+import Secret from "./Secret";
 
 interface Game {
   id: string;
@@ -64,8 +65,20 @@ export default function App() {
         <h1 style={styles.heroTitle}>SUKUNA<span style={styles.highlight}>ARTS</span></h1>
         <p style={styles.heroDesc}>Descubre una colección de juegos clásicos y desafiantes. Juega directamente en tu navegador, sin descargas.</p>
         <div style={styles.heroButtons}>
-          <button style={styles.btnPrimary} onClick={() => document.getElementById("juegos")?.scrollIntoView({ behavior: "smooth" })}>Jugar Ahora</button>
-        </div>
+        <button
+        style={styles.btnPrimary}
+        onClick={() => document.getElementById("juegos")?.scrollIntoView({ behavior: "smooth" })}
+        >
+        Jugar Ahora
+       </button>
+
+       <button
+       style={styles.btnPrimary}
+       onClick={() => setCurrentGame({ id: "secret", name: "Secret", icon: "🔒", category: "secret", tag: "Secret", players: "???", desc: "Zona secreta." })}
+       >
+    Secret
+  </button>
+</div>
       </section>
 
       {/* JUEGOS */}
@@ -111,7 +124,8 @@ export default function App() {
             <h3>{currentGame.name}</h3>
             <p>{currentGame.desc}</p>
 {currentGame.id === "tictactoe" && <TicTacToe />}
-{currentGame.id === "chess" && <ChessGame />}            
+{currentGame.id === "chess" && <ChessGame />} 
+{currentGame.id === "secret" && <Secret />}
           </div>
         </div>
       )}
