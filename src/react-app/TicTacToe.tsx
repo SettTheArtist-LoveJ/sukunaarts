@@ -5,16 +5,18 @@ export default function TicTacToe() {
   const [board, setBoard] = useState<(string | null)[]>(Array(9).fill(null));
   const [winner, setWinner] = useState<string | null>(null);
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard" | null>(null);
+  const [playerTurn, setPlayerTurn] = useState(true); // 👈 NUEVO
 
   const player = "X";
   const bot = "O";
 
   function handleClick(index: number) {
-    if (board[index] || winner || !difficulty) return;
+    if (board[index] || winner || !difficulty || !playerTurn) return;
 
     const newBoard = [...board];
     newBoard[index] = player;
     setBoard(newBoard);
+    setPlayerTurn(false); // 👈 bloquear turno
 
     const win = calculateWinner(newBoard);
     if (win) {
@@ -117,7 +119,12 @@ export default function TicTacToe() {
     setBoard(newBoard);
 
     const win = calculateWinner(newBoard);
-    if (win) setWinner(win);
+
+    if (win) {
+      setWinner(win);
+    } else {
+      setPlayerTurn(true); // 👈 devolver turno al jugador
+    }
   }
 
   function getEmpty(board: (string | null)[]) {
@@ -130,6 +137,7 @@ export default function TicTacToe() {
     setBoard(Array(9).fill(null));
     setWinner(null);
     setDifficulty(null);
+    setPlayerTurn(true); // 👈 reiniciar turno
   }
 
   if (!difficulty) {
@@ -150,7 +158,9 @@ export default function TicTacToe() {
           ? winner === player
             ? "🎉 Ganaste!"
             : "🤖 El Bot ganó!"
-          : "Tu turno (X)"}
+          : playerTurn
+          ? "Tu turno (X)"
+          : "🤖 Bot pensando..."}
       </h3>
 
       <div style={{
@@ -174,7 +184,8 @@ export default function TicTacToe() {
               fontWeight: "bold",
               background: "#1c1c25",
               borderRadius: "12px",
-              cursor: "pointer"
+              cursor: playerTurn ? "pointer" : "not-allowed",
+              opacity: playerTurn ? 1 : 0.7
             }}
           >
             {cell === "X" && <span style={{ color: "#f72585" }}>X</span>}
