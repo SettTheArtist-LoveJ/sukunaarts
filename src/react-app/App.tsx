@@ -50,7 +50,10 @@ export default function App() {
       <nav style={styles.nav}>
         <div style={styles.logo}>SUKUNA<span style={{ color: "#f72585" }}>ARTS</span></div>
         <ul style={styles.navLinks}>
-          {["Inicio", "Juegos", "Destacado", "Comunidad"].map((item) => (
+          {["Inicio",
+            "Juegos",
+            "Destacado",
+            "Comunidad"].map((item) => (
             <li key={item}><a href={`#${item.toLowerCase()}`} style={styles.navLink}>{item}</a></li>
           ))}
         </ul>
