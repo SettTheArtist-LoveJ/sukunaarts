@@ -144,7 +144,15 @@ const styles: Record<string, React.CSSProperties> = {
   navLink: { color: "#8d99ae", textDecoration: "none" },
   hero: { minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", padding: "6rem 2rem 4rem", zIndex: 1 },
   heroBadge: { padding: "0.4rem 1.2rem", border: "1px solid #e63946", borderRadius: "50px", color: "#e63946", fontSize: "0.85rem", marginBottom: "1.5rem" },
-  heroTitle: { fontFamily: "'Orbitron', sans-serif", fontSize: "4rem", fontWeight: 900, marginBottom: "1rem" },
+  heroTitle: { 
+  fontFamily: "'Orbitron', sans-serif",
+  fontSize: "clamp(2.2rem, 8vw, 4rem)",
+  fontWeight: 900,
+  marginBottom: "1rem",
+  lineHeight: 1.1,
+  wordBreak: "break-word",
+  textAlign: "center"
+},
   highlight: { background: "linear-gradient(135deg, #e63946, #f72585)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" },
   heroDesc: { color: "#8d99ae", fontSize: "1.2rem", maxWidth: "550px", marginBottom: "2.5rem" },
   heroButtons: { display: "flex", gap: "1rem" },
