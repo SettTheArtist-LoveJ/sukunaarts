@@ -157,10 +157,10 @@ export default function TicTacToe() {
         {winner
           ? winner === player
             ? "🎉 Ganaste!"
-            : "🤖 El Bot ganó!"
+            : "👹 Sukuna ganó!"
           : playerTurn
           ? "Tu turno (X)"
-          : "🤖 Bot pensando..."}
+          : "👹 Sukuna esta pensando..."}
       </h3>
 
       <div style={{
