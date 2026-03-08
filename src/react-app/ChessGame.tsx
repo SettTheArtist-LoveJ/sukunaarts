@@ -51,7 +51,7 @@ export default function ChessGame() {
   return (
     <div style={{ textAlign: "center" }}>
       <h2>
-        {game.turn() === "w" ? "⚪ Blancas deben mover" : "⚫ Negras deben mover"}
+        {game.turn() === "w" ? "⚪ Blancas deben mover " : "⚫ Negras deben mover"}
       </h2>
 
       <div
