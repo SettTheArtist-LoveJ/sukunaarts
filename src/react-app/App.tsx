@@ -52,11 +52,22 @@ function Home() {
       <nav style={styles.nav}>
         <div style={styles.logo}>SUKUNA<span style={{ color: "#f72585" }}>ARTS</span></div>
         <ul style={styles.navLinks}>
-          {["Inicio","Juegos"].map((item) => (
-            <li key={item}>
-              <a href={`#${item.toLowerCase()}`} style={styles.navLink}>{item}</a>
-            </li>
-          ))}
+         {["Inicio","Juegos"].map((item) => (
+  <li key={item}>
+    <a
+      href={`#${item.toLowerCase()}`}
+      style={styles.navLink}
+      onClick={(e) => {
+        e.preventDefault();
+        document
+          .getElementById(item.toLowerCase())
+          ?.scrollIntoView({ behavior: "smooth" });
+      }}
+    >
+      {item}
+    </a>
+  </li>
+))}
         </ul>
       </nav>
 
