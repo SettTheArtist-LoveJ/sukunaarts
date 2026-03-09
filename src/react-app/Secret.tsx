@@ -74,7 +74,19 @@ export default function Secret() {
                 (e.currentTarget.style.transform = "scale(1)")
               }
             >
-              Cuadro {num}
+              {num === 1 ? (
+                <img
+                  src="/tequiero1.png"
+                  style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "12px",
+               }}
+            />
+      ) : (
+  <>Cuadro {num}</>
+)}
             </div>
           ))}
         </div>
