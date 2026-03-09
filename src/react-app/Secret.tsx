@@ -1,10 +1,11 @@
 import { useState } from "react";
+import Love1 from "./LOVES/Love1";
 
 export default function Secret() {
   const [date, setDate] = useState("");
   const [access, setAccess] = useState(false);
+  const [openBox, setOpenBox] = useState<number | null>(null);
 
-  // 👇 FECHA SECRETA
   const secretDate = "2022-05-31";
 
   function checkPassword() {
@@ -30,7 +31,6 @@ export default function Secret() {
           padding: "20px",
         }}
       >
-        {/* Título LOVE */}
         <h1 style={{ fontSize: "4rem", color: "#ff6fa3", marginBottom: "40px" }}>
           LOVE 💖
         </h1>
@@ -46,6 +46,7 @@ export default function Secret() {
           {[1, 2, 3, 4, 5, 6].map((num) => (
             <div
               key={num}
+              onClick={() => setOpenBox(num)}
               style={{
                 width: "150px",
                 height: "150px",
@@ -66,11 +67,60 @@ export default function Secret() {
             </div>
           ))}
         </div>
+
+        {/* VENTANA GRANDE */}
+        {openBox !== null && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0,0,0,0.5)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "white",
+                width: "600px",
+                height: "400px",
+                borderRadius: "15px",
+                padding: "20px",
+                position: "relative",
+              }}
+            >
+              {/* BOTON SALIR */}
+              <button
+                onClick={() => setOpenBox(null)}
+                style={{
+                  position: "absolute",
+                  top: "10px",
+                  right: "10px",
+                  backgroundColor: "#ff6fa3",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  padding: "5px 10px",
+                  cursor: "pointer",
+                }}
+              >
+                Salir
+              </button>
+
+              {/* CONTENIDO */}
+              {openBox === 1 && <Love1 />}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
 
-  // 🔒 FORMULARIO DE FECHA
+  // 🔒 FORMULARIO
   return (
     <div
       style={{
