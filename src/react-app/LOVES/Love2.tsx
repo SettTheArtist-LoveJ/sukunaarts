@@ -1,20 +1,168 @@
-// src/LOVES/Love2.tsx
-import React from "react";
+import { useState, useEffect } from "react";
 
 export default function Love2() {
+  const [started, setStarted] = useState(false);
+  const [bubbles, setBubbles] = useState<
+    { id: number; size: number; left: number; duration: number; delay: number; sway: number; curve: number }[]
+  >([]);
+
+  useEffect(() => {
+    if (started) {
+      // Inicializamos burbujas
+      const initialBubbles = Array.from({ length: 40 }).map((_, i) => ({
+        id: i,
+        size: Math.random() * 12 + 6,
+        left: Math.random() * 100,
+        duration: 4 + Math.random() * 4,
+        delay: Math.random() * 2,
+        sway: Math.random() * 20 - 10,
+        curve: Math.random() * 30 - 15, // para movimiento curvo
+      }));
+      setBubbles(initialBubbles);
+
+      // Generación continua
+      const interval = setInterval(() => {
+        const newBubble = {
+          id: Date.now(),
+          size: Math.random() * 12 + 6,
+          left: Math.random() * 100,
+          duration: 4 + Math.random() * 4,
+          delay: 0,
+          sway: Math.random() * 20 - 10,
+          curve: Math.random() * 30 - 15,
+        };
+        setBubbles((prev) => [...prev, newBubble].slice(-60));
+      }, 400);
+
+      return () => clearInterval(interval);
+    }
+  }, [started]);
+
   return (
     <div
       style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        width: "100%",
         height: "100%",
-        fontSize: "clamp(2rem, 6vw, 4rem)",
-        color: "#ff4da6",
-        textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: "20px",
       }}
     >
-      💖 Te amo 💖
+      {/* OVERLAY INICIAL */}
+      {!started && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "black",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10,
+            cursor: "pointer",
+          }}
+          onClick={() => setStarted(true)}
+        >
+          <h2
+            style={{
+              color: "white",
+              marginBottom: "20px",
+              fontSize: "2rem",
+              textShadow: "0 0 8px #fff",
+              fontFamily: "'Brush Script MT', cursive"
+            }}
+          >
+            TOCA PARA ABRIR
+          </h2>
+          <img
+            src="https://www.dropbox.com/scl/fi/cmqvcdkq1ddgvhzwk2pn6/image.png?rlkey=79mreuh53xqegx80hy6drn77p&raw=1"
+            alt="Abrime"
+            style={{
+              width: "150px",
+              height: "150px",
+              objectFit: "contain",
+              borderRadius: "12px",
+            }}
+          />
+        </div>
+      )}
+
+      {/* FONDO OCEÁNICO */}
+      {started && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "linear-gradient(to top, #001f3f, #004080, #0077be)",
+            zIndex: 0,
+          }}
+        ></div>
+      )}
+
+      {/* BURBUJAS */}
+      {started &&
+        bubbles.map((b) => (
+          <div
+            key={b.id}
+            style={{
+              position: "absolute",
+              bottom: "-20px", // empieza justo debajo
+              left: `${b.left}%`,
+              width: `${b.size}px`,
+              height: `${b.size}px`,
+              borderRadius: "50%",
+              background: "rgba(255,255,255,0.6)",
+              animation: `rise-${b.id} ${b.duration}s linear forwards`,
+              animationDelay: `${b.delay}s`,
+              "--sway": `${b.sway}px`,
+              "--curve": `${b.curve}px`,
+            } as any}
+          ></div>
+        ))}
+
+      {/* ANIMACIONES CSS DINÁMICAS */}
+      <style>
+        {`
+          ${bubbles.map(
+            (b) => `
+              @keyframes rise-${b.id} {
+                0% {
+                  bottom: -20px;
+                  transform: translateX(0px);
+                  opacity: 0;
+                }
+                25% {
+                  bottom: 25%;
+                  transform: translateX(var(--sway)) translateY(0px) translateX(var(--curve));
+                  opacity: 0.5;
+                }
+                50% {
+                  bottom: 50%;
+                  transform: translateX(calc(var(--sway) * -0.5)) translateX(calc(var(--curve) * 0.5));
+                  opacity: 0.7;
+                }
+                75% {
+                  bottom: 75%;
+                  transform: translateX(calc(var(--sway) * 0.7)) translateX(calc(var(--curve) * -0.3));
+                  opacity: 0.8;
+                }
+                100% {
+                  bottom: 100%;
+                  transform: translateX(0px);
+                  opacity: 0;
+                }
+              }
+            `
+          ).join("\n")}
+        `}
+      </style>
     </div>
   );
 }
