@@ -168,25 +168,26 @@ display:flex;
 align-items:center;
 gap:15px;
 
-padding:16px 22px;
+padding:clamp(10px,2vw,16px) clamp(14px,3vw,22px);
 border-radius:25px;
 
 background:rgba(120,40,80,.85);
 backdrop-filter:blur(8px);
 
 color:white;
-width:420px;
+width:90%;
+max-width:420px;
 box-shadow:0 0 25px rgba(255,0,120,.6);
 }
 
 .music-btn{
-width:50px;
-height:50px;
+width:clamp(35px,6vw,50px);
+height:clamp(35px,6vw,50px);
 border-radius:50%;
 border:none;
 background:#ff3b6b;
 color:white;
-font-size:20px;
+font-size:clamp(14px,3vw,20px);
 cursor:pointer;
 
 display:flex;
@@ -224,7 +225,7 @@ margin-top:4px;
 }
 
 .heart-btn{
-  font-size:120px;
+  font-size:clamp(50px, 10vw, 120px);
   background:none;
   border:none;
   cursor:pointer;
@@ -280,13 +281,17 @@ animation:twinkle infinite ease-in-out;
 
 .phrase{
 position:absolute;
-padding:10px 18px;
+padding:clamp(6px,1.5vw,10px) clamp(10px,2vw,18px);
 background:rgba(139,69,119,.6);
 border-radius:20px;
 color:#ffd6e7;
 font-weight:bold;
+font-size:clamp(12px,2vw,16px);
+max-width:80%;
+text-align:center;
 transform:translate(-50%,-50%);
 opacity:0;
+
 }
 
 .phrase.shooting{
