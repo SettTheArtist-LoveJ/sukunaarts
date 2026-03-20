@@ -121,6 +121,22 @@ export default function Love2() {
           }}
         />
       )}
+      {started && (
+  <div
+    style={{
+      position: "absolute",
+      top: "60px",
+      left: "40px",
+      color: "white",
+      fontSize: "3rem",
+      fontFamily: "'Brush Script MT', cursive",
+      textShadow: "0 0 10px #ff6bb3, 0 0 20px #ff6bb3",
+      zIndex: 3
+    }}
+  >
+    flores para ti mi amor <br /> 💖
+  </div>
+)}
 
       {/* BURBUJAS */}
       {started &&
