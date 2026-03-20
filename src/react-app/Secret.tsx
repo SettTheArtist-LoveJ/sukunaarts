@@ -75,17 +75,27 @@ export default function Secret() {
                 (e.currentTarget.style.transform = "scale(1)")
               }
             >
-              {num === 1 ? (
-                <img
-                  src="/tequiero1.png"
-                  style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "12px",
-               }}
-            />
-      ) : (
+{num === 1 ? (
+  <img
+    src="/tequiero1.png"
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      borderRadius: "12px",
+    }}
+  />
+) : num === 2 ? (
+  <img
+    src="/tequiero2.png" // 👈 tu imagen del cuadro 2
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      borderRadius: "12px",
+    }}
+  />
+) : (
   <>Cuadro {num}</>
 )}
             </div>
