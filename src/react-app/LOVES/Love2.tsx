@@ -144,11 +144,11 @@ export default function Love2() {
     alt="foto"
     style={{
       position: "absolute",
-      top: "3vh",
+      top: "4vh",
       right: "4vw",
 
-      width: "15vw",        // 🔥 se adapta al ancho de pantalla
-      height: "15vw",
+      width: "12vw",        // 🔥 se adapta al ancho de pantalla
+      height: "12vw",
 
       maxWidth: "220px",    // límite en PC
       maxHeight: "220px",
