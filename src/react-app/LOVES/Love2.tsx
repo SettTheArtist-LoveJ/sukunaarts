@@ -147,8 +147,8 @@ export default function Love2() {
       top: "5vh",
       right: "5vw",
 
-      width: "20vw",        // 🔥 se adapta al ancho de pantalla
-      height: "20vw",
+      width: "15vw",        // 🔥 se adapta al ancho de pantalla
+      height: "15vw",
 
       maxWidth: "220px",    // límite en PC
       maxHeight: "220px",
