@@ -153,8 +153,8 @@ export default function Love2() {
       maxWidth: "220px",    // límite en PC
       maxHeight: "220px",
 
-      minWidth: "100px",     // límite en celulares pequeños
-      minHeight: "100px",
+      minWidth: "70px",     // límite en celulares pequeños
+      minHeight: "70px",
 
       borderRadius: "50%",
       objectFit: "cover",
