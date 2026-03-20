@@ -125,13 +125,14 @@ export default function Love2() {
   <div
     style={{
       position: "absolute",
-      top: "60px",
-      left: "40px",
+      top: "5vh", // 👈 relativo a pantalla
+      left: "4vw",
       color: "white",
-      fontSize: "3rem",
+      fontSize: "clamp(1.2rem, 4vw, 3rem)", // 👈 clave 🔥
       fontFamily: "'Brush Script MT', cursive",
       textShadow: "0 0 10px #ff6bb3, 0 0 20px #ff6bb3",
-      zIndex: 3
+      zIndex: 3,
+      lineHeight: "1.2"
     }}
   >
     flores para ti mi amor <br /> 💖
