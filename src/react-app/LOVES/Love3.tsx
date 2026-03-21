@@ -43,22 +43,25 @@ export default function CorazonParticulas() {
     };
 
     function resizeCanvas() {
-      const parent = heartCanvas.parentElement!;
+      const parent = heartCanvas.parentElement;
+      if (!parent) return;
+
       const rect = parent.getBoundingClientRect();
+
+      // 🔥 evita bug en móvil cuando aún no hay tamaño
+      if (rect.width === 0 || rect.height === 0) return;
+
       const dpr = window.devicePixelRatio || 1;
 
-      const width = rect.width;
-      const height = rect.height;
+      backgroundCanvas.width = rect.width * dpr;
+      backgroundCanvas.height = rect.height * dpr;
+      heartCanvas.width = rect.width * dpr;
+      heartCanvas.height = rect.height * dpr;
 
-      backgroundCanvas.width = width * dpr;
-      backgroundCanvas.height = height * dpr;
-      heartCanvas.width = width * dpr;
-      heartCanvas.height = height * dpr;
-
-      backgroundCanvas.style.width = width + "px";
-      backgroundCanvas.style.height = height + "px";
-      heartCanvas.style.width = width + "px";
-      heartCanvas.style.height = height + "px";
+      backgroundCanvas.style.width = rect.width + "px";
+      backgroundCanvas.style.height = rect.height + "px";
+      heartCanvas.style.width = rect.width + "px";
+      heartCanvas.style.height = rect.height + "px";
 
       bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -69,7 +72,7 @@ export default function CorazonParticulas() {
     const particles: any[] = [];
     const stars: any[] = [];
 
-    const isMobile = heartCanvas.width <= 768;
+    const isMobile = window.innerWidth <= 768; // 🔥 mejor que antes
 
     const rect = heartCanvas.getBoundingClientRect();
     const scaleFactor = Math.min(rect.width, rect.height) / 600;
@@ -81,20 +84,13 @@ export default function CorazonParticulas() {
     };
 
     class Star {
-      x: number;
-      y: number;
-      size: number;
-      opacity: number;
-      speed: number;
-
-      constructor() {
-        const rect = backgroundCanvas.getBoundingClientRect();
-        this.x = Math.random() * rect.width;
-        this.y = Math.random() * rect.height;
-        this.size = Math.random() * 1.5 + 0.5;
-        this.opacity = Math.random();
-        this.speed = Math.random() * 0.02 + 0.005;
-      }
+      constructor(
+        public x = Math.random() * backgroundCanvas.width,
+        public y = Math.random() * backgroundCanvas.height,
+        public size = Math.random() * 1.5 + 0.5,
+        public opacity = Math.random(),
+        public speed = Math.random() * 0.02 + 0.005
+      ) {}
 
       update() {
         this.opacity += this.speed;
@@ -139,31 +135,12 @@ export default function CorazonParticulas() {
     }
 
     class Particle {
-      constructor(public x: number, public y: number, isText = false) {
+      constructor(public x: number, public y: number) {
         this.baseX = x;
         this.baseY = y;
-
-        const cfg = isText ? config.text : config.heart;
-
-        this.size =
-          (Math.random() * cfg.particleSizeRange + cfg.particleSizeMin) *
-          scaleFactor;
-
-        this.density =
-          Math.random() * cfg.densityRange + cfg.densityMin;
-
-        this.color = isText
-          ? `hsl(${350 + Math.random() * 20},100%,90%)`
-          : `hsl(${345 + Math.random() * 10},100%,70%)`;
-
-        this.trembleOffset = Math.random() * Math.PI * 2;
-        this.trembleSpeed = Math.random() * 0.1 + 0.06;
-        this.trembleAmplitude = cfg.trembleAmplitude * scaleFactor;
-
-        this.orbitOffset = Math.random() * Math.PI * 2;
-        this.orbitSpeed =
-          Math.random() * cfg.orbitSpeedRange + cfg.orbitSpeedMin;
-        this.orbitRadius = cfg.orbitRadius * scaleFactor;
+        this.size = (Math.random() * 2 + 1.5) * scaleFactor;
+        this.density = Math.random() * 20 + 1;
+        this.color = `hsl(${345 + Math.random() * 10},100%,70%)`;
       }
 
       baseX: number;
@@ -171,12 +148,6 @@ export default function CorazonParticulas() {
       size: number;
       density: number;
       color: string;
-      trembleOffset: number;
-      trembleSpeed: number;
-      trembleAmplitude: number;
-      orbitOffset: number;
-      orbitSpeed: number;
-      orbitRadius: number;
 
       draw() {
         ctx.beginPath();
@@ -186,37 +157,18 @@ export default function CorazonParticulas() {
       }
 
       update() {
-        const time = Date.now() * 0.001;
-
-        const trembleX =
-          Math.sin(time * this.trembleSpeed + this.trembleOffset) *
-          this.trembleAmplitude;
-        const trembleY =
-          Math.cos(time * this.trembleSpeed + this.trembleOffset) *
-          this.trembleAmplitude;
-
-        const orbitX =
-          Math.sin(time * this.orbitSpeed + this.orbitOffset) *
-          this.orbitRadius;
-        const orbitY =
-          Math.cos(time * this.orbitSpeed + this.orbitOffset) *
-          this.orbitRadius;
-
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
         const distance = Math.hypot(dx, dy);
 
         const force = (mouse.radius - distance) / mouse.radius;
 
-        const targetX = this.baseX + trembleX + orbitX;
-        const targetY = this.baseY + trembleY + orbitY;
-
         if (distance < mouse.radius) {
           this.x -= (dx / distance) * force * this.density;
           this.y -= (dy / distance) * force * this.density;
         } else {
-          this.x += (targetX - this.x) / 8;
-          this.y += (targetY - this.y) / 8;
+          this.x += (this.baseX - this.x) / 8;
+          this.y += (this.baseY - this.y) / 8;
         }
 
         this.draw();
@@ -231,8 +183,7 @@ export default function CorazonParticulas() {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
 
-      const scale =
-        Math.min(heartCanvas.width, heartCanvas.height) * 0.3;
+      const scale = Math.min(rect.width, rect.height) * 0.3;
 
       for (let i = 0; i < config.heart.particleCount; i++) {
         const t = Math.random() * Math.PI * 2;
@@ -275,8 +226,10 @@ export default function CorazonParticulas() {
       style={{
         width: "100%",
         height: "100%",
-        minHeight: "60vh", // 🔥 SOLUCIÓN PARA CELULAR
+        minHeight: "50vh", // 🔥 más equilibrado que 60vh
         position: "relative",
+        overflow: "hidden", // 🔥 como Love2
+        borderRadius: "20px",
       }}
     >
       <canvas ref={bgRef} style={{ position: "absolute", inset: 0 }} />
