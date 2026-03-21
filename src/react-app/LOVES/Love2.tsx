@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Love2() {
   const [started, setStarted] = useState(false);
   const [bubbles, setBubbles] = useState<
     { id: number; size: number; left: number; duration: number; delay: number; sway: number; curve: number }[]
   >([]);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     if (started) {
@@ -33,6 +35,13 @@ export default function Love2() {
       }, 400);
 
       return () => clearInterval(interval);
+    }
+  }, [started]);
+
+  // 🔥 agregado: reproducir música
+  useEffect(() => {
+    if (started && audioRef.current) {
+      audioRef.current.play().catch(() => {});
     }
   }, [started]);
 
@@ -79,7 +88,7 @@ export default function Love2() {
           </h2>
 
           <img
-            src="https://www.dropbox.com/scl/fi/cmqvcdkq1ddgvhzwk2pn6/image.png?rlkey=79mreuh53xqegx80hy6drn77p&raw=1"
+            src="https://www.dropbox.com/scl/fi/tvj9gsetdg765gbun7tp7/CORA.png?rlkey=gwgyujz9zyu3cttvy01ky62d1&st=vsgyabh7&dl=1"
             alt="Abrime"
             style={{
               width: "150px",
@@ -121,51 +130,53 @@ export default function Love2() {
           }}
         />
       )}
+
       {started && (
-  <div
-    style={{
-      position: "absolute",
-      top: "5vh", // 👈 relativo a pantalla
-      left: "4vw",
-      color: "white",
-      fontSize: "clamp(1.2rem, 4vw, 3rem)", // 👈 clave 🔥
-      fontFamily: "'Brush Script MT', cursive",
-      textShadow: "0 0 10px #ff6bb3, 0 0 20px #ff6bb3",
-      zIndex: 3,
-      lineHeight: "1.2"
-    }}
-  >
-    flores para ti mi amor <br /> 💖
-  </div>
-)}
-{started && (
-  <img
-    src="/Item/paraisolove.png"
-    alt="foto"
-    style={{
-      position: "absolute",
-      top: "4vh",
-      right: "4vw",
+        <div
+          style={{
+            position: "absolute",
+            top: "5vh",
+            left: "4vw",
+            color: "white",
+            fontSize: "clamp(1.2rem, 4vw, 3rem)",
+            fontFamily: "'Brush Script MT', cursive",
+            textShadow: "0 0 10px #ff6bb3, 0 0 20px #ff6bb3",
+            zIndex: 3,
+            lineHeight: "1.2"
+          }}
+        >
+          flores para ti mi amor <br /> 💖
+        </div>
+      )}
 
-      width: "30vw",        // 🔥 se adapta al ancho de pantalla
-      height: "30vw",
+      {started && (
+        <img
+          src="/Item/paraisolove.png"
+          alt="foto"
+          style={{
+            position: "absolute",
+            top: "4vh",
+            right: "4vw",
+            width: "30vw",
+            height: "30vw",
+            maxWidth: "220px",
+            maxHeight: "220px",
+            minWidth: "100px",
+            minHeight: "100px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            border: "3px solid white",
+            boxShadow: "0 0 15px #ff6bb3",
+            zIndex: 3
+          }}
+        />
+      )}
 
-      maxWidth: "220px",    // límite en PC
-      maxHeight: "220px",
+      {/* 🔥 AUDIO AGREGADO */}
+      <audio ref={audioRef} loop>
+        <source src="https://www.dropbox.com/scl/fi/lmrw1dv1si66i5hze4o1w/TEquieroati.mp3?rlkey=8pp4f0jnkkn5p09ef1m2sjikn&st=6alhuurq&dl=1" />
+      </audio>
 
-      minWidth: "100px",     // límite en celulares pequeños
-      minHeight: "100px",
-
-      borderRadius: "50%",
-      objectFit: "cover",
-
-      border: "3px solid white",
-      boxShadow: "0 0 15px #ff6bb3",
-
-      zIndex: 3
-    }}
-  />
-)}
       {/* BURBUJAS */}
       {started &&
         bubbles.map((b) => (
