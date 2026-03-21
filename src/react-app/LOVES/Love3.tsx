@@ -65,7 +65,8 @@ export default function CorazonParticulas() {
     const particles: any[] = [];
     const stars: any[] = [];
 
-    const isMobile = heartCanvas.width <= 768;
+    // ✅ AHORA REALMENTE RESPONSIVE
+    const isMobile = window.innerWidth <= 768;
 
     const rect = heartCanvas.getBoundingClientRect();
     const scaleFactor = Math.min(rect.width, rect.height) / 600;
@@ -76,7 +77,6 @@ export default function CorazonParticulas() {
       radius: config.mouse.radius * scaleFactor,
     };
 
-    // ⭐ ESTRELLAS RESPONSIVE
     class Star {
       x: number;
       y: number;
@@ -97,11 +97,7 @@ export default function CorazonParticulas() {
 
       update() {
         this.opacity += this.speed;
-
-        if (this.opacity >= 1 || this.opacity <= 0) {
-          this.speed *= -1;
-        }
-
+        if (this.opacity >= 1 || this.opacity <= 0) this.speed *= -1;
         this.draw();
       }
 
@@ -135,7 +131,6 @@ export default function CorazonParticulas() {
     window.addEventListener("touchmove", handleTouchMove, { passive: false });
     window.addEventListener("resize", handleResize);
 
-    // ⭐ FONDO RESPONSIVE
     function drawBackground() {
       const dpr = window.devicePixelRatio || 1;
 
@@ -174,6 +169,10 @@ export default function CorazonParticulas() {
         this.isTextParticle = isText;
 
         const cfg = isText ? config.text : config.heart;
+
+        // ✅ tamaño responsive real
+        const rect = heartCanvas.getBoundingClientRect();
+        const scaleFactor = Math.min(rect.width, rect.height) / 600;
 
         this.size =
           (Math.random() * cfg.particleSizeRange + cfg.particleSizeMin) *
@@ -248,7 +247,7 @@ export default function CorazonParticulas() {
       const text = "Te amo ❤️";
 
       const fontSize =
-        Math.min(heartCanvas.width, heartCanvas.height) *
+        Math.min(rect.width, rect.height) *
         (isMobile ? config.text.fontSizeMobile : config.text.fontSizeDesktop);
 
       const tempCanvas = document.createElement("canvas");
@@ -284,9 +283,14 @@ export default function CorazonParticulas() {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
 
+      const baseSize = Math.min(rect.width, rect.height);
+
       const scale =
-        Math.min(heartCanvas.width, heartCanvas.height) *
-        (isMobile ? config.heart.scaleFactor : config.heart.scaleFactorDesktop) * 1.3;
+        baseSize *
+        (isMobile
+          ? config.heart.scaleFactor
+          : config.heart.scaleFactorDesktop) *
+        1.3;
 
       for (let i = 0; i < config.heart.particleCount; i++) {
         const t = Math.random() * Math.PI * 2;
@@ -318,9 +322,7 @@ export default function CorazonParticulas() {
     function animate() {
       drawBackground();
       ctx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
-
       particles.forEach((p) => p.update());
-
       animationId = requestAnimationFrame(animate);
     }
 
@@ -333,7 +335,6 @@ export default function CorazonParticulas() {
       window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("resize", handleResize);
     };
-
   }, []);
 
   return (
