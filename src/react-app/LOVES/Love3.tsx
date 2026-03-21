@@ -144,7 +144,7 @@ export default function CorazonParticulas() {
         this.baseY = y;
         this.isTextParticle = isText;
         const cfg = isText ? config.text : config.heart;
-        this.size = (Math.random() * cfg.particleSizeRange + cfg.particleSizeMin) * 1; // se ajusta después
+        this.size = (Math.random() * cfg.particleSizeRange + cfg.particleSizeMin) * 1;
         this.density = Math.random() * cfg.densityRange + cfg.densityMin;
         this.color = isText
           ? `hsl(${350 + Math.random() * 20},100%,90%)`
@@ -232,10 +232,10 @@ export default function CorazonParticulas() {
       const centerY = rect.height / 2;
       const isMobile = rect.width <= 768;
 
-      // recalcular escala para móviles
+      // 🔥 SOLO CAMBIO AQUÍ (quitado * 1.3)
       const scale =
         Math.min(rect.width, rect.height) *
-        (isMobile ? 0.55 : config.heart.scaleFactorDesktop) * 1.3;
+        (isMobile ? 0.55 : config.heart.scaleFactorDesktop);
 
       mouse.radius = config.mouse.radius * (Math.min(rect.width, rect.height) / 600);
 
@@ -249,7 +249,7 @@ export default function CorazonParticulas() {
             Math.cos(4 * t));
 
         const p = new Particle(centerX + (x * scale) / 16, centerY + (y * scale) / 16);
-        p.size *= Math.min(rect.width, rect.height) / 600; // ajustar tamaño
+        p.size *= Math.min(rect.width, rect.height) / 600;
         p.trembleAmplitude *= Math.min(rect.width, rect.height) / 600;
         p.orbitRadius *= Math.min(rect.width, rect.height) / 600;
         particles.push(p);
