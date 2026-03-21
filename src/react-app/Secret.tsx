@@ -96,6 +96,16 @@ export default function Secret() {
       borderRadius: "12px",
     }}
   />
+) : num === 3 ? (
+  <img
+    src="/tequiero3.png" // 👈 tu imagen del cuadro 3
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      borderRadius: "12px",
+    }}
+  />
 ) : (
   <>Cuadro {num}</>
 )}
