@@ -49,22 +49,36 @@ export default function CorazonParticulas() {
       },
     };
 
-    function resizeCanvas() {
-      const rect = heartCanvas.parentElement!.getBoundingClientRect();
-      backgroundCanvas.width = rect.width;
-      backgroundCanvas.height = rect.height;
-      heartCanvas.width = rect.width;
-      heartCanvas.height = rect.height;
-    }
+function resizeCanvas() {
+  const rect = heartCanvas.parentElement!.getBoundingClientRect();
 
+  const dpr = window.devicePixelRatio || 1;
+
+  // Tamaño real (resolución interna)
+  backgroundCanvas.width = rect.width * dpr;
+  backgroundCanvas.height = rect.height * dpr;
+  heartCanvas.width = rect.width * dpr;
+  heartCanvas.height = rect.height * dpr;
+
+  // Tamaño visual (CSS)
+  backgroundCanvas.style.width = rect.width + "px";
+  backgroundCanvas.style.height = rect.height + "px";
+  heartCanvas.style.width = rect.width + "px";
+  heartCanvas.style.height = rect.height + "px";
+
+  // Escalado correcto
+  bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
     resizeCanvas();
 
     const particles: any[] = [];
     const isMobile = heartCanvas.width <= 768;
 
-    const scaleFactor =
-      Math.min(heartCanvas.width, heartCanvas.height) / 600;
-
+    const rect = heartCanvas.getBoundingClientRect();
+     const scaleFactor =
+      Math.min(rect.width, rect.height) / 600;
+    
     const mouse = {
       x: 0,
       y: 0,
@@ -101,31 +115,22 @@ export default function CorazonParticulas() {
       const waveTime = time * config.background.waveSpeed;
       const secondaryWaveTime = time * config.background.secondaryWaveSpeed;
 
-      for (let x = 0; x < backgroundCanvas.width; x += 10) {
-        for (let y = 0; y < backgroundCanvas.height; y += 10) {
-          const dx = (x - backgroundCanvas.width / 2) / backgroundCanvas.width;
-          const dy =
-            (y - backgroundCanvas.height / 2) / backgroundCanvas.height;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+      const rect = backgroundCanvas.getBoundingClientRect();
 
-          const wave =
-            Math.sin(distance * 10 + waveTime) *
-            config.background.waveAmplitude;
-          const secondaryWave =
-            Math.cos(distance * 8 + secondaryWaveTime) *
-            config.background.secondaryWaveAmplitude;
+const gradient = bgCtx.createRadialGradient(
+  rect.width / 2,
+  rect.height / 2,
+  0,
+  rect.width / 2,
+  rect.height / 2,
+  rect.width / 1.2
+);
 
-          const red = Math.min(
-            255 *
-              config.background.redIntensity *
-              (distance + wave + secondaryWave),
-            255
-          );
+gradient.addColorStop(0, "rgba(0,0,0,0.9)");
+gradient.addColorStop(1, "rgba(255,0,0,0.3)");
 
-          bgCtx.fillStyle = `rgba(${red},0,0,${1 - distance * 0.8})`;
-          bgCtx.fillRect(x, y, 10, 10);
-        }
-      }
+bgCtx.fillStyle = gradient;
+bgCtx.fillRect(0, 0, rect.width, rect.height);
     }
 
     class Particle {
@@ -220,8 +225,9 @@ export default function CorazonParticulas() {
     }
 
     function createTextParticles() {
-      const centerX = heartCanvas.width / 2;
-      const centerY = heartCanvas.height / 2;
+      const rect = heartCanvas.getBoundingClientRect();
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
       const text = "Te amo ❤️";
 
       const fontSize =
@@ -260,15 +266,15 @@ export default function CorazonParticulas() {
 
     function init() {
       particles.length = 0;
-
-      const centerX = heartCanvas.width / 2;
-      const centerY = heartCanvas.height / 2;
+         const rect = heartCanvas.getBoundingClientRect();
+         const centerX = rect.width / 2;
+         const centerY = rect.height / 2;
 
       const scale =
         Math.min(heartCanvas.width, heartCanvas.height) *
         (isMobile
           ? config.heart.scaleFactor
-          : config.heart.scaleFactorDesktop) * 1.7;
+          : config.heart.scaleFactorDesktop) * 1.3;
 
       for (let i = 0; i < config.heart.particleCount; i++) {
         const t = Math.random() * Math.PI * 2;
