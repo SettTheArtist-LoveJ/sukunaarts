@@ -40,52 +40,77 @@ export default function CorazonParticulas() {
         densityRange: 20,
       },
       mouse: { radius: 100 },
-      background: {
-        waveSpeed: 0.001,
-        waveAmplitude: 0.4,
-        secondaryWaveSpeed: 0.0008,
-        secondaryWaveAmplitude: 0.3,
-        redIntensity: 0.3,
-      },
     };
 
-function resizeCanvas() {
-  const rect = heartCanvas.parentElement!.getBoundingClientRect();
+    function resizeCanvas() {
+      const rect = heartCanvas.parentElement!.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
 
-  const dpr = window.devicePixelRatio || 1;
+      backgroundCanvas.width = rect.width * dpr;
+      backgroundCanvas.height = rect.height * dpr;
+      heartCanvas.width = rect.width * dpr;
+      heartCanvas.height = rect.height * dpr;
 
-  // Tamaño real (resolución interna)
-  backgroundCanvas.width = rect.width * dpr;
-  backgroundCanvas.height = rect.height * dpr;
-  heartCanvas.width = rect.width * dpr;
-  heartCanvas.height = rect.height * dpr;
+      backgroundCanvas.style.width = rect.width + "px";
+      backgroundCanvas.style.height = rect.height + "px";
+      heartCanvas.style.width = rect.width + "px";
+      heartCanvas.style.height = rect.height + "px";
 
-  // Tamaño visual (CSS)
-  backgroundCanvas.style.width = rect.width + "px";
-  backgroundCanvas.style.height = rect.height + "px";
-  heartCanvas.style.width = rect.width + "px";
-  heartCanvas.style.height = rect.height + "px";
+      bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
 
-  // Escalado correcto
-  bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-}
     resizeCanvas();
 
     const particles: any[] = [];
+    const stars: any[] = []; // ⭐ NUEVO
+
     const isMobile = heartCanvas.width <= 768;
 
     const rect = heartCanvas.getBoundingClientRect();
-     const scaleFactor =
-      Math.min(rect.width, rect.height) / 600;
-    
+    const scaleFactor = Math.min(rect.width, rect.height) / 600;
+
     const mouse = {
       x: 0,
       y: 0,
       radius: config.mouse.radius * scaleFactor,
     };
 
-    // ✅ EVENTOS CORRECTOS
+    // ⭐ CLASE ESTRELLA
+    class Star {
+      x: number;
+      y: number;
+      size: number;
+      opacity: number;
+      speed: number;
+
+      constructor() {
+        const rect = backgroundCanvas.getBoundingClientRect();
+        this.x = Math.random() * rect.width;
+        this.y = Math.random() * rect.height;
+        this.size = Math.random() * 1.5 + 0.5;
+        this.opacity = Math.random();
+        this.speed = Math.random() * 0.02 + 0.005;
+      }
+
+      update() {
+        this.opacity += this.speed;
+
+        if (this.opacity >= 1 || this.opacity <= 0) {
+          this.speed *= -1;
+        }
+
+        this.draw();
+      }
+
+      draw() {
+        bgCtx.beginPath();
+        bgCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        bgCtx.fillStyle = `rgba(255,255,255,${this.opacity})`;
+        bgCtx.fill();
+      }
+    }
+
     function handleMouseMove(e: MouseEvent) {
       const rect = heartCanvas.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;
@@ -108,38 +133,12 @@ function resizeCanvas() {
     window.addEventListener("touchmove", handleTouchMove, { passive: false });
     window.addEventListener("resize", handleResize);
 
+    // ⭐ NUEVO FONDO
     function drawBackground() {
-      bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+      bgCtx.fillStyle = "black";
+      bgCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
-      const time = Date.now();
-      const waveTime = time * config.background.waveSpeed;
-      const secondaryWaveTime = time * config.background.secondaryWaveSpeed;
-
-      for (let x = 0; x < backgroundCanvas.width; x += 10) {
-        for (let y = 0; y < backgroundCanvas.height; y += 10) {
-          const rect = backgroundCanvas.getBoundingClientRect();
-          const dx = (x - rect.width / 2) / rect.width;
-          const dy = (y - backgroundCanvas.height / 2) / backgroundCanvas.height;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          const wave =
-            Math.sin(distance * 10 + waveTime) *
-            config.background.waveAmplitude;
-          const secondaryWave =
-            Math.cos(distance * 8 + secondaryWaveTime) *
-            config.background.secondaryWaveAmplitude;
-
-          const red = Math.min(
-            255 *
-              config.background.redIntensity *
-              (distance + wave + secondaryWave),
-            255
-          );
-
-          bgCtx.fillStyle = `rgba(${red},0,0,${1 - distance * 0.8})`;
-          bgCtx.fillRect(x, y, 10, 10);
-        }
-      }
+      stars.forEach((star) => star.update());
     }
 
     class Particle {
@@ -256,12 +255,7 @@ function resizeCanvas() {
 
       tempCtx.fillText(text, centerX, centerY);
 
-      const data = tempCtx.getImageData(
-        0,
-        0,
-        tempCanvas.width,
-        tempCanvas.height
-      ).data;
+      const data = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
 
       for (let y = 0; y < tempCanvas.height; y += 2) {
         for (let x = 0; x < tempCanvas.width; x += 2) {
@@ -275,15 +269,15 @@ function resizeCanvas() {
 
     function init() {
       particles.length = 0;
-         const rect = heartCanvas.getBoundingClientRect();
-         const centerX = rect.width / 2;
-         const centerY = rect.height / 2;
+      stars.length = 0; // ⭐ reset estrellas
+
+      const rect = heartCanvas.getBoundingClientRect();
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
 
       const scale =
         Math.min(heartCanvas.width, heartCanvas.height) *
-        (isMobile
-          ? config.heart.scaleFactor
-          : config.heart.scaleFactorDesktop) * 1.3;
+        (isMobile ? config.heart.scaleFactor : config.heart.scaleFactorDesktop) * 1.3;
 
       for (let i = 0; i < config.heart.particleCount; i++) {
         const t = Math.random() * Math.PI * 2;
@@ -303,10 +297,14 @@ function resizeCanvas() {
         );
       }
 
+      // ⭐ crear estrellas
+      for (let i = 0; i < 150; i++) {
+        stars.push(new Star());
+      }
+
       createTextParticles();
     }
 
-    // ✅ ANIMACIÓN CORREGIDA
     let animationId: number;
 
     function animate() {
@@ -321,7 +319,6 @@ function resizeCanvas() {
     init();
     animate();
 
-    // ✅ LIMPIEZA (LA CLAVE DEL LAG)
     return () => {
       cancelAnimationFrame(animationId);
       heartCanvas.removeEventListener("mousemove", handleMouseMove);
