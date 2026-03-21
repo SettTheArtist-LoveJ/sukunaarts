@@ -234,7 +234,7 @@ export default function CorazonParticulas() {
       const centerY = rect.height / 2;
       const text = "Te amo ❤️";
 
-      const fontSize = Math.min(rect.width, rect.height) * 0.08;
+      const fontSize = Math.min(rect.width, rect.height) * 0.13;
 
       const tempCanvas = document.createElement("canvas");
       const tempCtx = tempCanvas.getContext("2d")!;
