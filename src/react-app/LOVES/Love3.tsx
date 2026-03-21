@@ -63,7 +63,7 @@ export default function CorazonParticulas() {
     resizeCanvas();
 
     const particles: any[] = [];
-    const stars: any[] = []; // ⭐ NUEVO
+    const stars: any[] = [];
 
     const isMobile = heartCanvas.width <= 768;
 
@@ -76,7 +76,7 @@ export default function CorazonParticulas() {
       radius: config.mouse.radius * scaleFactor,
     };
 
-    // ⭐ CLASE ESTRELLA
+    // ⭐ ESTRELLAS RESPONSIVE
     class Star {
       x: number;
       y: number;
@@ -85,9 +85,11 @@ export default function CorazonParticulas() {
       speed: number;
 
       constructor() {
-        const rect = backgroundCanvas.getBoundingClientRect();
-        this.x = Math.random() * rect.width;
-        this.y = Math.random() * rect.height;
+        const dpr = window.devicePixelRatio || 1;
+
+        this.x = Math.random() * (backgroundCanvas.width / dpr);
+        this.y = Math.random() * (backgroundCanvas.height / dpr);
+
         this.size = Math.random() * 1.5 + 0.5;
         this.opacity = Math.random();
         this.speed = Math.random() * 0.02 + 0.005;
@@ -133,10 +135,17 @@ export default function CorazonParticulas() {
     window.addEventListener("touchmove", handleTouchMove, { passive: false });
     window.addEventListener("resize", handleResize);
 
-    // ⭐ NUEVO FONDO
+    // ⭐ FONDO RESPONSIVE
     function drawBackground() {
+      const dpr = window.devicePixelRatio || 1;
+
       bgCtx.fillStyle = "black";
-      bgCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+      bgCtx.fillRect(
+        0,
+        0,
+        backgroundCanvas.width / dpr,
+        backgroundCanvas.height / dpr
+      );
 
       stars.forEach((star) => star.update());
     }
@@ -269,7 +278,7 @@ export default function CorazonParticulas() {
 
     function init() {
       particles.length = 0;
-      stars.length = 0; // ⭐ reset estrellas
+      stars.length = 0;
 
       const rect = heartCanvas.getBoundingClientRect();
       const centerX = rect.width / 2;
@@ -297,7 +306,6 @@ export default function CorazonParticulas() {
         );
       }
 
-      // ⭐ crear estrellas
       for (let i = 0; i < 150; i++) {
         stars.push(new Star());
       }
@@ -329,9 +337,17 @@ export default function CorazonParticulas() {
   }, []);
 
   return (
-    <>
-      <canvas ref={bgRef} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1 }} />
-      <canvas ref={heartRef} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 2 }} />
-    </>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: "20px",
+      }}
+    >
+      <canvas ref={bgRef} style={{ position: "absolute", inset: 0, zIndex: 1 }} />
+      <canvas ref={heartRef} style={{ position: "absolute", inset: 0, zIndex: 2 }} />
+    </div>
   );
 }
