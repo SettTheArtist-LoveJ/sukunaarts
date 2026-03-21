@@ -109,25 +109,45 @@ function resizeCanvas() {
     window.addEventListener("resize", handleResize);
 
     function drawBackground() {
-      bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+  bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
-      const rect = backgroundCanvas.getBoundingClientRect();
+  const rect = backgroundCanvas.getBoundingClientRect();
 
-const gradient = bgCtx.createRadialGradient(
-  rect.width / 2,
-  rect.height / 2,
-  0,
-  rect.width / 2,
-  rect.height / 2,
-  rect.width / 1.2
-);
+  const time = Date.now() * 0.00014;
 
-gradient.addColorStop(0, "rgba(0,0,0,0.9)");
-gradient.addColorStop(1, "rgba(255,0,0,0.3)");
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
 
-bgCtx.fillStyle = gradient;
-bgCtx.fillRect(0, 0, rect.width, rect.height);
+  const maxDist = Math.hypot(centerX, centerY);
+
+  // 🔥 más pequeño = más suave
+  const step = 4;
+
+  for (let x = 0; x < rect.width; x += step) {
+    for (let y = 0; y < rect.height; y += step) {
+      const dx = x - centerX;
+      const dy = y - centerY;
+      const dist = Math.hypot(dx, dy);
+
+      // 🔥 normalizamos distancia (0 centro → 1 bordes)
+      const normalized = dist / maxDist;
+
+      // 🌊 onda que viene desde bordes hacia el centro
+      const wave = Math.sin(10 * normalized + time * 4);
+
+      // 🔴 SOLO aparece en la onda (lo demás queda negro)
+      const intensity = Math.pow(Math.max(0, wave), 2);
+
+      // ✨ se desvanece al llegar al centro
+      const fade = normalized;
+
+      const red = intensity * fade * 255;
+
+      bgCtx.fillStyle = `rgb(${red}, 0, 0)`;
+      bgCtx.fillRect(x, y, step, step);
     }
+  }
+}
 
     class Particle {
       x: number;
