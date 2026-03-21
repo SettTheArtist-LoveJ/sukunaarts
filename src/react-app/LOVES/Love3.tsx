@@ -109,45 +109,38 @@ function resizeCanvas() {
     window.addEventListener("resize", handleResize);
 
     function drawBackground() {
-  bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+      bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
-  const rect = backgroundCanvas.getBoundingClientRect();
+      const time = Date.now();
+      const waveTime = time * config.background.waveSpeed;
+      const secondaryWaveTime = time * config.background.secondaryWaveSpeed;
 
-  const time = Date.now() * 0.00014;
+      for (let x = 0; x < backgroundCanvas.width; x += 10) {
+        for (let y = 0; y < backgroundCanvas.height; y += 10) {
+          const rect = backgroundCanvas.getBoundingClientRect();
+          const dx = (x - rect.width / 2) / rect.width;
+          const dy = (y - backgroundCanvas.height / 2) / backgroundCanvas.height;
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
+          const wave =
+            Math.sin(distance * 10 + waveTime) *
+            config.background.waveAmplitude;
+          const secondaryWave =
+            Math.cos(distance * 8 + secondaryWaveTime) *
+            config.background.secondaryWaveAmplitude;
 
-  const maxDist = Math.hypot(centerX, centerY);
+          const red = Math.min(
+            255 *
+              config.background.redIntensity *
+              (distance + wave + secondaryWave),
+            255
+          );
 
-  // 🔥 más pequeño = más suave
-  const step = 4;
-
-  for (let x = 0; x < rect.width; x += step) {
-    for (let y = 0; y < rect.height; y += step) {
-      const dx = x - centerX;
-      const dy = y - centerY;
-      const dist = Math.hypot(dx, dy);
-
-      // 🔥 normalizamos distancia (0 centro → 1 bordes)
-      const normalized = dist / maxDist;
-
-      // 🌊 onda que viene desde bordes hacia el centro
-      const wave = Math.sin(10 * normalized + time * 4);
-
-      // 🔴 SOLO aparece en la onda (lo demás queda negro)
-      const intensity = Math.max(0, wave);
-
-      // ✨ se desvanece al llegar al centro
-      const fade = normalized;
-
-      const red = intensity * fade * 255;
-
-      bgCtx.fillStyle = `rgb(${red}, 0, 0)`;
-      bgCtx.fillRect(x, y, step, step);
+          bgCtx.fillStyle = `rgba(${red},0,0,${1 - distance * 0.8})`;
+          bgCtx.fillRect(x, y, 10, 10);
+        }
+      }
     }
-  }
-}
 
     class Particle {
       x: number;
