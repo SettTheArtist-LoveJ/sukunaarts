@@ -112,8 +112,6 @@ function resizeCanvas() {
       bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
       const time = Date.now();
-      const waveTime = time * config.background.waveSpeed;
-      const secondaryWaveTime = time * config.background.secondaryWaveSpeed;
 
       const rect = backgroundCanvas.getBoundingClientRect();
 
