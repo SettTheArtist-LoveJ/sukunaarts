@@ -60,7 +60,7 @@ export default function CorazonParticulas() {
     resizeCanvas();
 
     const particles: any[] = [];
-    const isMobile = window.innerWidth <= 768;
+    const isMobile = heartCanvas.width <= 768;
 
     const scaleFactor =
       Math.min(heartCanvas.width, heartCanvas.height) / 600;
@@ -68,9 +68,10 @@ export default function CorazonParticulas() {
     const mouse = {
       x: 0,
       y: 0,
-      radius: (isMobile ? 100 : 200) * scaleFactor, // ajustado según pantalla
+      radius: config.mouse.radius * scaleFactor,
     };
 
+    // ✅ EVENTOS CORRECTOS
     function handleMouseMove(e: MouseEvent) {
       const rect = heartCanvas.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;
@@ -103,13 +104,23 @@ export default function CorazonParticulas() {
       for (let x = 0; x < backgroundCanvas.width; x += 10) {
         for (let y = 0; y < backgroundCanvas.height; y += 10) {
           const dx = (x - backgroundCanvas.width / 2) / backgroundCanvas.width;
-          const dy = (y - backgroundCanvas.height / 2) / backgroundCanvas.height;
+          const dy =
+            (y - backgroundCanvas.height / 2) / backgroundCanvas.height;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          const wave = Math.sin(distance * 10 + waveTime) * config.background.waveAmplitude;
-          const secondaryWave = Math.cos(distance * 8 + secondaryWaveTime) * config.background.secondaryWaveAmplitude;
+          const wave =
+            Math.sin(distance * 10 + waveTime) *
+            config.background.waveAmplitude;
+          const secondaryWave =
+            Math.cos(distance * 8 + secondaryWaveTime) *
+            config.background.secondaryWaveAmplitude;
 
-          const red = Math.min(255 * config.background.redIntensity * (distance + wave + secondaryWave), 255);
+          const red = Math.min(
+            255 *
+              config.background.redIntensity *
+              (distance + wave + secondaryWave),
+            255
+          );
 
           bgCtx.fillStyle = `rgba(${red},0,0,${1 - distance * 0.8})`;
           bgCtx.fillRect(x, y, 10, 10);
@@ -142,8 +153,13 @@ export default function CorazonParticulas() {
 
         const cfg = isText ? config.text : config.heart;
 
-        this.size = (Math.random() * cfg.particleSizeRange + cfg.particleSizeMin) * scaleFactor;
-        this.density = Math.random() * cfg.densityRange + cfg.densityMin;
+        this.size =
+          (Math.random() * cfg.particleSizeRange + cfg.particleSizeMin) *
+          scaleFactor;
+
+        this.density =
+          Math.random() * cfg.densityRange + cfg.densityMin;
+
         this.color = isText
           ? `hsl(${350 + Math.random() * 20},100%,90%)`
           : `hsl(${345 + Math.random() * 10},100%,70%)`;
@@ -151,8 +167,10 @@ export default function CorazonParticulas() {
         this.trembleOffset = Math.random() * Math.PI * 2;
         this.trembleSpeed = Math.random() * 0.1 + 0.06;
         this.trembleAmplitude = cfg.trembleAmplitude * scaleFactor;
+
         this.orbitOffset = Math.random() * Math.PI * 2;
-        this.orbitSpeed = Math.random() * cfg.orbitSpeedRange + cfg.orbitSpeedMin;
+        this.orbitSpeed =
+          Math.random() * cfg.orbitSpeedRange + cfg.orbitSpeedMin;
         this.orbitRadius = cfg.orbitRadius * scaleFactor;
       }
 
@@ -166,11 +184,19 @@ export default function CorazonParticulas() {
       update() {
         const time = Date.now() * 0.001;
 
-        const trembleX = Math.sin(time * this.trembleSpeed + this.trembleOffset) * this.trembleAmplitude;
-        const trembleY = Math.cos(time * this.trembleSpeed + this.trembleOffset) * this.trembleAmplitude;
+        const trembleX =
+          Math.sin(time * this.trembleSpeed + this.trembleOffset) *
+          this.trembleAmplitude;
+        const trembleY =
+          Math.cos(time * this.trembleSpeed + this.trembleOffset) *
+          this.trembleAmplitude;
 
-        const orbitX = Math.sin(time * this.orbitSpeed + this.orbitOffset) * this.orbitRadius;
-        const orbitY = Math.cos(time * this.orbitSpeed + this.orbitOffset) * this.orbitRadius;
+        const orbitX =
+          Math.sin(time * this.orbitSpeed + this.orbitOffset) *
+          this.orbitRadius;
+        const orbitY =
+          Math.cos(time * this.orbitSpeed + this.orbitOffset) *
+          this.orbitRadius;
 
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
@@ -198,7 +224,8 @@ export default function CorazonParticulas() {
       const centerY = heartCanvas.height / 2;
       const text = "Te amo ❤️";
 
-      const fontSize = Math.min(heartCanvas.width, heartCanvas.height) *
+      const fontSize =
+        Math.min(heartCanvas.width, heartCanvas.height) *
         (isMobile ? config.text.fontSizeMobile : config.text.fontSizeDesktop);
 
       const tempCanvas = document.createElement("canvas");
@@ -214,7 +241,12 @@ export default function CorazonParticulas() {
 
       tempCtx.fillText(text, centerX, centerY);
 
-      const data = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
+      const data = tempCtx.getImageData(
+        0,
+        0,
+        tempCanvas.width,
+        tempCanvas.height
+      ).data;
 
       for (let y = 0; y < tempCanvas.height; y += 2) {
         for (let x = 0; x < tempCanvas.width; x += 2) {
@@ -232,22 +264,36 @@ export default function CorazonParticulas() {
       const centerX = heartCanvas.width / 2;
       const centerY = heartCanvas.height / 2;
 
-      const scale = Math.min(heartCanvas.width, heartCanvas.height) *
-        (isMobile ? config.heart.scaleFactor : config.heart.scaleFactorDesktop) * 1.7;
+      const scale =
+        Math.min(heartCanvas.width, heartCanvas.height) *
+        (isMobile
+          ? config.heart.scaleFactor
+          : config.heart.scaleFactorDesktop) * 1.7;
 
       for (let i = 0; i < config.heart.particleCount; i++) {
         const t = Math.random() * Math.PI * 2;
 
         const x = 16 * Math.pow(Math.sin(t), 3);
-        const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+        const y =
+          -(13 * Math.cos(t) -
+            5 * Math.cos(2 * t) -
+            2 * Math.cos(3 * t) -
+            Math.cos(4 * t));
 
-        particles.push(new Particle(centerX + (x * scale) / 16, centerY + (y * scale) / 16));
+        particles.push(
+          new Particle(
+            centerX + (x * scale) / 16,
+            centerY + (y * scale) / 16
+          )
+        );
       }
 
       createTextParticles();
     }
 
+    // ✅ ANIMACIÓN CORREGIDA
     let animationId: number;
+
     function animate() {
       drawBackground();
       ctx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
@@ -260,24 +306,20 @@ export default function CorazonParticulas() {
     init();
     animate();
 
+    // ✅ LIMPIEZA (LA CLAVE DEL LAG)
     return () => {
       cancelAnimationFrame(animationId);
       heartCanvas.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("resize", handleResize);
     };
+
   }, []);
 
   return (
     <>
-      <canvas
-        ref={bgRef}
-        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1 }}
-      />
-      <canvas
-        ref={heartRef}
-        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 2 }}
-      />
+      <canvas ref={bgRef} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1 }} />
+      <canvas ref={heartRef} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 2 }} />
     </>
   );
 }
