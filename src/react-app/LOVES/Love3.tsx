@@ -34,8 +34,6 @@ export default function CorazonParticulas() {
         orbitRadius: 2,
         orbitSpeedMin: 0.03,
         orbitSpeedRange: 0.05,
-        pixelStepMobile: 1.2,
-        pixelStepDesktop: 1.8,
         densityMin: 1,
         densityRange: 20,
       },
@@ -65,16 +63,7 @@ export default function CorazonParticulas() {
     const particles: any[] = [];
     const stars: any[] = [];
 
-    const isMobile = window.innerWidth <= 768;
-
-    const rect = heartCanvas.getBoundingClientRect();
-    const scaleFactor = Math.min(rect.width, rect.height) / 600;
-
-    const mouse = {
-      x: 0,
-      y: 0,
-      radius: config.mouse.radius * scaleFactor,
-    };
+    const mouse = { x: 0, y: 0, radius: 100 };
 
     class Star {
       x: number;
@@ -85,6 +74,7 @@ export default function CorazonParticulas() {
 
       constructor() {
         const dpr = window.devicePixelRatio || 1;
+
         this.x = Math.random() * (backgroundCanvas.width / dpr);
         this.y = Math.random() * (backgroundCanvas.height / dpr);
         this.size = Math.random() * 1.5 + 0.5;
@@ -165,6 +155,11 @@ export default function CorazonParticulas() {
         this.baseY = y;
         this.isTextParticle = isText;
 
+        const rect = heartCanvas.getBoundingClientRect();
+        const scaleFactor = Math.min(rect.width, rect.height) / 600;
+
+        mouse.radius = config.mouse.radius * scaleFactor;
+
         const cfg = isText ? config.text : config.heart;
 
         this.size =
@@ -233,16 +228,13 @@ export default function CorazonParticulas() {
       }
     }
 
-    // 🔥 TEXTO MEJORADO
     function createTextParticles() {
       const rect = heartCanvas.getBoundingClientRect();
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
       const text = "Te amo ❤️";
 
-      const fontSize =
-        Math.min(rect.width, rect.height) *
-        (isMobile ? config.text.fontSizeMobile : config.text.fontSizeDesktop);
+      const fontSize = Math.min(rect.width, rect.height) * 0.08;
 
       const tempCanvas = document.createElement("canvas");
       const tempCtx = tempCanvas.getContext("2d")!;
@@ -250,33 +242,19 @@ export default function CorazonParticulas() {
       tempCanvas.width = heartCanvas.width;
       tempCanvas.height = heartCanvas.height;
 
-      // ✨ fuente más fina
-      tempCtx.font = `600 ${fontSize}px "Poppins", "Segoe UI", Arial`;
+      tempCtx.font = `bold ${fontSize}px Arial`;
       tempCtx.fillStyle = "white";
-
-      // ✨ suavizado glow
-      tempCtx.shadowColor = "white";
-      tempCtx.shadowBlur = 8;
-
       tempCtx.textAlign = "center";
       tempCtx.textBaseline = "middle";
 
       tempCtx.fillText(text, centerX, centerY);
 
-      const data = tempCtx.getImageData(
-        0,
-        0,
-        tempCanvas.width,
-        tempCanvas.height
-      ).data;
+      const data = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
 
-      // ✨ más definición
-      const step = isMobile ? 1 : 1.5;
-
-      for (let y = 0; y < tempCanvas.height; y += step) {
-        for (let x = 0; x < tempCanvas.width; x += step) {
+      for (let y = 0; y < tempCanvas.height; y += 2) {
+        for (let x = 0; x < tempCanvas.width; x += 2) {
           const i = (y * tempCanvas.width + x) * 4;
-          if (data[i + 3] > 180) {
+          if (data[i + 3] > 128) {
             particles.push(new Particle(x, y, true));
           }
         }
@@ -293,9 +271,7 @@ export default function CorazonParticulas() {
 
       const scale =
         Math.min(rect.width, rect.height) *
-        (isMobile
-          ? config.heart.scaleFactor
-          : config.heart.scaleFactorDesktop) *
+        config.heart.scaleFactor *
         1.3;
 
       for (let i = 0; i < config.heart.particleCount; i++) {
