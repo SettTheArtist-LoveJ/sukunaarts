@@ -136,7 +136,7 @@ function resizeCanvas() {
       const wave = Math.sin(10 * normalized + time * 4);
 
       // 🔴 SOLO aparece en la onda (lo demás queda negro)
-      const intensity = Math.pow(Math.max(0, wave), 2);
+      const intensity = Math.max(0, wave);
 
       // ✨ se desvanece al llegar al centro
       const fade = normalized;
