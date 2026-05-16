@@ -26,18 +26,25 @@ export default function Love4() {
 
     let bloodLevel = 0;
 
-    // NUEVO
     let heartCompleted = false;
 
     ctx.textBaseline = "middle";
 
+    // 🔥 ADAPTAR A CELULAR
     const resizeCanvas = () => {
-      const parent = canvas.parentElement;
+      const dpr =
+        window.devicePixelRatio || 1;
 
-      if (!parent) return;
+      canvas.width =
+        window.innerWidth * dpr;
 
-      canvas.width = parent.clientWidth;
-      canvas.height = parent.clientHeight;
+      canvas.height =
+        window.innerHeight * dpr;
+
+      canvas.style.width = "100vw";
+      canvas.style.height = "100vh";
+
+      ctx.scale(dpr, dpr);
 
       createHeart();
     };
@@ -64,8 +71,11 @@ export default function Love4() {
         this.y = y;
         this.delay = delay;
 
+        // 🔥 MÁS PEQUEÑO EN CELULAR
         this.size =
-          Math.random() * 2 + 16;
+          window.innerWidth < 768
+            ? Math.random() * 2 + 9
+            : Math.random() * 2 + 16;
       }
 
       update(frame: number) {
@@ -112,7 +122,7 @@ export default function Love4() {
         this.y = y;
 
         this.speed =
-          Math.random() * 1 + 2;  
+          Math.random() * 1 + 2;
 
         this.size =
           Math.random() * 3 + 4;
@@ -142,16 +152,17 @@ export default function Love4() {
 
         if (
           this.y >=
-          canvas.height - bloodLevel
+          window.innerHeight -
+            bloodLevel
         ) {
           bloodLevel += 0.7;
 
           if (
             bloodLevel >
-            canvas.height
+            window.innerHeight
           ) {
             bloodLevel =
-              canvas.height;
+              window.innerHeight;
           }
 
           tears.splice(index, 1);
@@ -163,18 +174,28 @@ export default function Love4() {
       particles = [];
 
       const centerX =
-        canvas.width / 2;
+        window.innerWidth / 2;
 
       const centerY =
-        canvas.height / 2;
+        window.innerHeight / 2;
 
+      // 🔥 ESCALA RESPONSIVE
       const baseScale =
-        Math.min(
-          canvas.width,
-          canvas.height
-        ) * 0.035;
+        window.innerWidth < 768
+          ? Math.min(
+              window.innerWidth,
+              window.innerHeight
+            ) * 0.022
+          : Math.min(
+              window.innerWidth,
+              window.innerHeight
+            ) * 0.035;
 
-      const total = 70;
+      // 🔥 MENOS TEXTO EN CELULAR
+      const total =
+        window.innerWidth < 768
+          ? 45
+          : 70;
 
       const heartLayers = 3;
 
@@ -232,8 +253,8 @@ export default function Love4() {
       ctx.clearRect(
         0,
         0,
-        canvas.width,
-        canvas.height
+        window.innerWidth,
+        window.innerHeight
       );
 
       // FONDO
@@ -242,19 +263,19 @@ export default function Love4() {
       ctx.fillRect(
         0,
         0,
-        canvas.width,
-        canvas.height
+        window.innerWidth,
+        window.innerHeight
       );
 
       // LUZ
       const glow =
         ctx.createRadialGradient(
-          canvas.width / 2,
-          canvas.height / 2,
+          window.innerWidth / 2,
+          window.innerHeight / 2,
           0,
-          canvas.width / 2,
-          canvas.height / 2,
-          canvas.width * 0.3
+          window.innerWidth / 2,
+          window.innerHeight / 2,
+          window.innerWidth * 0.3
         );
 
       glow.addColorStop(
@@ -272,14 +293,14 @@ export default function Love4() {
       ctx.fillRect(
         0,
         0,
-        canvas.width,
-        canvas.height
+        window.innerWidth,
+        window.innerHeight
       );
 
       // AGUA
       if (bloodLevel > 0) {
         const topY =
-          canvas.height -
+          window.innerHeight -
           bloodLevel;
 
         const gradient =
@@ -287,7 +308,7 @@ export default function Love4() {
             0,
             topY,
             0,
-            canvas.height
+            window.innerHeight
           );
 
         gradient.addColorStop(
@@ -304,14 +325,14 @@ export default function Love4() {
 
         ctx.moveTo(
           0,
-          canvas.height
+          window.innerHeight
         );
 
         ctx.lineTo(0, topY);
 
         for (
           let x = 0;
-          x <= canvas.width;
+          x <= window.innerWidth;
           x += 20
         ) {
           const wave =
@@ -327,8 +348,8 @@ export default function Love4() {
         }
 
         ctx.lineTo(
-          canvas.width,
-          canvas.height
+          window.innerWidth,
+          window.innerHeight
         );
 
         ctx.closePath();
@@ -338,43 +359,9 @@ export default function Love4() {
         ctx.shadowBlur = 10;
 
         ctx.fill();
-
-        // REFLEJO
-        ctx.beginPath();
-
-        for (
-          let x = 0;
-          x <= canvas.width;
-          x += 20
-        ) {
-          const wave =
-            Math.sin(
-              x * 0.015 +
-                frame * 0.04
-            ) * 8;
-
-          if (x === 0) {
-            ctx.moveTo(
-              x,
-              topY + wave
-            );
-          } else {
-            ctx.lineTo(
-              x,
-              topY + wave
-            );
-          }
-        }
-
-        ctx.strokeStyle =
-          "rgba(255,255,255,0.15)";
-
-        ctx.lineWidth = 1;
-
-        ctx.stroke();
       }
 
-      // CORAZON
+      // CORAZÓN
       if (startedRef.current) {
         frame++;
 
@@ -388,7 +375,6 @@ export default function Love4() {
           }
         });
 
-        // CUANDO TERMINA DE FORMARSE
         if (
           visibleParticles >=
           particles.length * 0.98
@@ -396,7 +382,6 @@ export default function Love4() {
           heartCompleted = true;
         }
 
-        // GOTAS SOLO DESPUES
         if (heartCompleted) {
           particles.forEach((p) => {
             if (
@@ -425,14 +410,16 @@ export default function Love4() {
         tears[i].update(i);
       }
 
-      // TEXTO CENTRAL
+      // TEXTO CENTRAL RESPONSIVE
       ctx.textAlign = "center";
 
       const textSize =
-        Math.min(
-          canvas.width,
-          canvas.height
-        ) * 0.07;
+        window.innerWidth < 768
+          ? 28
+          : Math.min(
+              window.innerWidth,
+              window.innerHeight
+            ) * 0.07;
 
       ctx.font = `bold ${textSize}px Arial`;
 
@@ -444,8 +431,8 @@ export default function Love4() {
 
       ctx.fillText(
         "I LOVE YOU",
-        canvas.width / 2,
-        canvas.height / 2
+        window.innerWidth / 2,
+        window.innerHeight / 2
       );
 
       animationId =
@@ -478,11 +465,13 @@ export default function Love4() {
   return (
     <div
       style={{
-        width: "100%",
-        height: "100%",
+        width: "100vw",
+        height: "100vh",
         background: "#000",
-        position: "relative",
+        position: "fixed",
+        inset: 0,
         overflow: "hidden",
+        touchAction: "none",
       }}
     >
       <canvas
@@ -499,8 +488,14 @@ export default function Love4() {
         <div
           style={{
             position: "absolute",
-            bottom: 40,
+
+            bottom:
+              window.innerWidth < 768
+                ? 70
+                : 40,
+
             left: "50%",
+
             transform:
               "translateX(-50%)",
 
@@ -517,48 +512,67 @@ export default function Love4() {
           <span
             style={{
               color: "#fff",
+
               letterSpacing: 2,
+
+              fontSize:
+                window.innerWidth < 768
+                  ? 14
+                  : 18,
             }}
           >
-            DALE CLICK
-
+            TOCA EL CORAZÓN
           </span>
 
-<button
-  onClick={() =>
-    setStarted(true)
-  }
-  style={{
-    width: 75,
-    height: 75,
+          <button
+            onClick={() =>
+              setStarted(true)
+            }
+            style={{
+              width:
+                window.innerWidth < 768
+                  ? 65
+                  : 75,
 
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+              height:
+                window.innerWidth < 768
+                  ? 65
+                  : 75,
 
-    padding: 0,
+              display: "flex",
 
-    borderRadius: "50%",
+              alignItems: "center",
 
-    border:
-      "2px solid #ff0000",
+              justifyContent:
+                "center",
 
-    background:
-      "rgba(255,0,0,.08)",
+              padding: 0,
 
-    color: "#fff",
+              borderRadius: "50%",
 
-    fontSize: 35,
-    lineHeight: 1,
+              border:
+                "2px solid #ff0000",
 
-    cursor: "pointer",
+              background:
+                "rgba(255,0,0,.08)",
 
-    boxShadow:
-      "0 0 20px #ff0000",
-  }}
->
-  ♡
-</button>
+              color: "#fff",
+
+              fontSize:
+                window.innerWidth < 768
+                  ? 28
+                  : 35,
+
+              lineHeight: 1,
+
+              cursor: "pointer",
+
+              boxShadow:
+                "0 0 20px #ff0000",
+            }}
+          >
+            ♡
+          </button>
         </div>
       )}
     </div>
