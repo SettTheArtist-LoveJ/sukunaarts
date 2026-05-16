@@ -9,7 +9,7 @@ export default function Love4() {
     const ctx = canvas.getContext("2d")!;
 
     let particles: Particle[] = [];
-    const appearanceSpeed = 8;
+    const appearanceSpeed = 6.5;
 
     const offsetX = -55;
 
