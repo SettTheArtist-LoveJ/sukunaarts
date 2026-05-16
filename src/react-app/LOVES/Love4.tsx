@@ -10,6 +10,9 @@ export default function Love4() {
 
     let particles: Particle[] = [];
 
+    // AJUSTE VISUAL PARA CENTRAR PERFECTAMENTE
+    const offsetX = -55;
+
     const resizeCanvas = () => {
       const parent = canvas.parentElement;
 
@@ -42,7 +45,8 @@ export default function Love4() {
         angle: number,
         radius: number
       ) {
-        this.x = canvas.width / 2;
+        // COMIENZAN DESDE EL CENTRO VISUAL
+        this.x = canvas.width / 2 + offsetX;
         this.y = canvas.height / 2;
 
         this.tx = tx;
@@ -52,7 +56,9 @@ export default function Love4() {
         this.radius = radius;
 
         this.size = Math.random() * 4 + 14;
-        this.speed = Math.random() * 0.012 + 0.008;
+
+        this.speed =
+          Math.random() * 0.012 + 0.008;
       }
 
       update() {
@@ -66,7 +72,9 @@ export default function Love4() {
 
         this.x =
           canvas.width / 2 +
-          (this.tx - canvas.width / 2) *
+          offsetX +
+          (this.tx -
+            (canvas.width / 2 + offsetX)) *
             this.progress +
           Math.cos(
             this.angle + this.progress * 10
@@ -104,7 +112,10 @@ export default function Love4() {
     function createHeart() {
       particles = [];
 
-      const centerX = canvas.width / 2;
+      // CENTRO VISUAL REAL
+      const centerX =
+        canvas.width / 2 + offsetX;
+
       const centerY = canvas.height / 2;
 
       const scale =
@@ -113,6 +124,7 @@ export default function Love4() {
           canvas.height
         ) * 0.028;
 
+      // MENOS PARTÍCULAS PARA MÁS ESPACIO
       const total = 120;
 
       for (let i = 0; i < total; i++) {
@@ -143,6 +155,7 @@ export default function Love4() {
 
     function animate() {
       ctx.fillStyle = "rgba(0,0,0,0.12)";
+
       ctx.fillRect(
         0,
         0,
@@ -154,6 +167,7 @@ export default function Love4() {
         particles.forEach((p) => p.update());
       }
 
+      // TEXTO CENTRAL
       ctx.save();
 
       ctx.textAlign = "center";
@@ -172,9 +186,10 @@ export default function Love4() {
       ctx.shadowColor = "#ff2e88";
       ctx.shadowBlur = 40;
 
+      // TEXTO CENTRADO CON EL CORAZÓN
       ctx.fillText(
         "I LOVE YOU",
-        canvas.width / 2,
+        canvas.width / 2 + offsetX,
         canvas.height / 2
       );
 
@@ -242,6 +257,7 @@ export default function Love4() {
           >
             HAZ CLICK PARA COMENZAR
           </span>
+
           <button
             onClick={() =>
               setStarted(true)
@@ -252,11 +268,14 @@ export default function Love4() {
               borderRadius: "50%",
               border:
                 "2px solid #ff2e63",
+
               background:
                 "rgba(255,0,80,.08)",
+
               color: "#fff",
               fontSize: 35,
               cursor: "pointer",
+
               boxShadow:
                 "0 0 35px #ff2e88",
             }}
