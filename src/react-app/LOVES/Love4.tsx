@@ -10,7 +10,7 @@ export default function Love4() {
 
     let particles: Particle[] = [];
 
-    // AJUSTE VISUAL PARA CENTRAR PERFECTAMENTE
+    // SOLO EL CORAZÓN SE MUEVE
     const offsetX = -55;
 
     const resizeCanvas = () => {
@@ -45,7 +45,6 @@ export default function Love4() {
         angle: number,
         radius: number
       ) {
-        // COMIENZAN DESDE EL CENTRO VISUAL
         this.x = canvas.width / 2 + offsetX;
         this.y = canvas.height / 2;
 
@@ -112,7 +111,7 @@ export default function Love4() {
     function createHeart() {
       particles = [];
 
-      // CENTRO VISUAL REAL
+      // CORAZÓN CENTRADO VISUALMENTE
       const centerX =
         canvas.width / 2 + offsetX;
 
@@ -124,7 +123,6 @@ export default function Love4() {
           canvas.height
         ) * 0.028;
 
-      // MENOS PARTÍCULAS PARA MÁS ESPACIO
       const total = 120;
 
       for (let i = 0; i < total; i++) {
@@ -186,10 +184,10 @@ export default function Love4() {
       ctx.shadowColor = "#ff2e88";
       ctx.shadowBlur = 40;
 
-      // TEXTO CENTRADO CON EL CORAZÓN
+      // TEXTO PERFECTAMENTE CENTRADO
       ctx.fillText(
         "I LOVE YOU",
-        canvas.width / 2 + offsetX,
+        canvas.width / 2,
         canvas.height / 2
       );
 
