@@ -13,16 +13,25 @@ export default function LoveHeart() {
 
     let particles: Particle[] = [];
 
-    let animationId = 0;
-
     let frame = 0;
 
+    let animationId = 0;
+
+    // MISMO MÉTODO DE CENTRADO
+    // QUE TU CÓDIGO ORIGINAL
+    const offsetX = -55;
+
     const resizeCanvas = () => {
+      const parent =
+        canvas.parentElement;
+
+      if (!parent) return;
+
       canvas.width =
-        window.innerWidth;
+        parent.clientWidth;
 
       canvas.height =
-        window.innerHeight;
+        parent.clientHeight;
 
       createHeart();
     };
@@ -30,20 +39,30 @@ export default function LoveHeart() {
     class Particle {
       x: number;
       y: number;
-      opacity = 0;
+
       delay: number;
+
+      opacity = 0;
 
       constructor(
         x: number,
         y: number,
         delay: number
       ) {
-        this.x = x;
-        this.y = y;
+        // MISMO CUADREO
+        // Y DISPERSIÓN
+        this.x =
+          x +
+          (Math.random() - 0.5) * 6;
+
+        this.y =
+          y +
+          (Math.random() - 0.5) * 6;
+
         this.delay = delay;
       }
 
-      draw(frame: number) {
+      update(frame: number) {
         if (frame < this.delay)
           return;
 
@@ -60,7 +79,7 @@ export default function LoveHeart() {
 
         ctx.shadowColor = "#ff69b4";
 
-        ctx.shadowBlur = 25;
+        ctx.shadowBlur = 22;
 
         ctx.fillText(
           "I love you",
@@ -75,58 +94,106 @@ export default function LoveHeart() {
     function createHeart() {
       particles = [];
 
+      // MISMO CENTRADO
       const centerX =
-        canvas.width / 2;
+        canvas.width / 2 + offsetX;
 
       const centerY =
         canvas.height / 2;
 
-      const scale =
+      // MISMO MÉTODO
+      // DE ESCALADO
+      const baseScale =
         Math.min(
           canvas.width,
           canvas.height
-        ) * 0.018;
+        ) * 0.028;
 
-      const total = 500;
+      const total = 260;
+
+      const heartLayers = 5;
 
       for (
-        let i = 0;
-        i < total;
-        i++
+        let layer = 0;
+        layer < heartLayers;
+        layer++
       ) {
-        const t =
-          (i / total) *
-          Math.PI *
-          2;
+        const scale =
+          baseScale *
+          (1 - layer * 0.12);
 
-        const x =
-          16 *
-          Math.pow(
-            Math.sin(t),
-            3
-          );
+        for (
+          let sideIndex = 0;
+          sideIndex < total / 2;
+          sideIndex++
+        ) {
+          // MISMO MÉTODO
+          // IZQUIERDA/DERECHA
+          const leftT =
+            (sideIndex / total) *
+            Math.PI *
+            2;
 
-        const y =
-          -(
-            13 * Math.cos(t) -
-            5 * Math.cos(2 * t) -
-            2 * Math.cos(3 * t) -
-            Math.cos(4 * t)
-          );
+          const rightT =
+            ((total - sideIndex) /
+              total) *
+            Math.PI *
+            2;
 
-        particles.push(
-          new Particle(
-            centerX +
-              x * scale +
-              (Math.random() - 0.5) * 8,
+          const sides = [
+            leftT,
+            rightT,
+          ];
 
-            centerY +
-              y * scale +
-              (Math.random() - 0.5) * 8,
+          sides.forEach((t) => {
+            const x =
+              16 *
+              Math.pow(
+                Math.sin(t),
+                3
+              );
 
-            i * 2
-          )
-        );
+            const y =
+              -(
+                13 * Math.cos(t) -
+                5 *
+                  Math.cos(2 * t) -
+                2 *
+                  Math.cos(3 * t) -
+                Math.cos(4 * t)
+              );
+
+            // MISMO CUADREO
+            let randomOffset = 8;
+
+            if (layer === 0) {
+              randomOffset = 2;
+            }
+
+            // MISMA ANIMACIÓN
+            const delay =
+              layer * 30 +
+              sideIndex * 1.2;
+
+            particles.push(
+              new Particle(
+                centerX +
+                  x * scale +
+                  (Math.random() -
+                    0.5) *
+                    randomOffset,
+
+                centerY +
+                  y * scale +
+                  (Math.random() -
+                    0.5) *
+                    randomOffset,
+
+                delay
+              )
+            );
+          });
+        }
       }
     }
 
@@ -138,7 +205,7 @@ export default function LoveHeart() {
         canvas.height
       );
 
-      ctx.fillStyle = "black";
+      ctx.fillStyle = "#000";
 
       ctx.fillRect(
         0,
@@ -147,10 +214,61 @@ export default function LoveHeart() {
         canvas.height
       );
 
-      frame++;
+      // MISMO GLOW CENTRAL
+      const glow =
+        ctx.createRadialGradient(
+          canvas.width / 2 +
+            offsetX,
+
+          canvas.height / 2,
+
+          20,
+
+          canvas.width / 2 +
+            offsetX,
+
+          canvas.height / 2,
+
+          260
+        );
+
+      glow.addColorStop(
+        0,
+        "rgba(255,105,180,0.35)"
+      );
+
+      glow.addColorStop(
+        0.4,
+        "rgba(255,105,180,0.12)"
+      );
+
+      glow.addColorStop(
+        1,
+        "rgba(255,105,180,0)"
+      );
+
+      ctx.fillStyle = glow;
+
+      ctx.beginPath();
+
+      ctx.arc(
+        canvas.width / 2 +
+          offsetX,
+
+        canvas.height / 2,
+
+        260,
+
+        0,
+        Math.PI * 2
+      );
+
+      ctx.fill();
+
+      frame += 2;
 
       particles.forEach((p) =>
-        p.draw(frame)
+        p.update(frame)
       );
 
       animationId =
@@ -183,15 +301,18 @@ export default function LoveHeart() {
   return (
     <div
       style={{
-        width: "100vw",
-        height: "100vh",
-        overflow: "hidden",
+        width: "100%",
+        height: "100%",
         background: "#000",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
       <canvas
         ref={canvasRef}
         style={{
+          position: "absolute",
+          inset: 0,
           width: "100%",
           height: "100%",
         }}
