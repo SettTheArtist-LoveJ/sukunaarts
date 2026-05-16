@@ -38,8 +38,12 @@ export default function Love4() {
         y: number,
         delay: number
       ) {
-        this.x = x;
-        this.y = y;
+        // PEQUEÑO DESORDEN PARA QUE CHOQUEN
+        this.x =
+          x + (Math.random() - 0.5) * 18;
+
+        this.y =
+          y + (Math.random() - 0.5) * 18;
 
         this.delay = delay;
 
@@ -47,7 +51,6 @@ export default function Love4() {
       }
 
       update(frame: number) {
-        // ESPERAR TURNO
         if (frame < this.delay) return;
 
         // APARICIÓN LENTA
@@ -90,17 +93,17 @@ export default function Love4() {
 
       const total = 120;
 
-      // MENOS CORAZONES Y MÁS ESPACIO
-      const heartLayers = 5;
+      // MÁS CORAZONES
+      const heartLayers = 6;
 
       for (
         let layer = 0;
         layer < heartLayers;
         layer++
       ) {
-        // MÁS DISTANCIA ENTRE CADA CORAZÓN
+        // MÁS JUNTOS PARA QUE SE TOQUEN
         const scale =
-          baseScale * (1 - layer * 0.20);
+          baseScale * (1 - layer * 0.14);
 
         for (let i = 0; i < total; i++) {
           const t =
@@ -118,10 +121,9 @@ export default function Love4() {
               Math.cos(4 * t)
             );
 
-          // APARICIÓN ALEATORIA
           const delay =
             Math.random() * 100 +
-            layer * 25;
+            layer * 20;
 
           particles.push(
             new Particle(
@@ -153,6 +155,46 @@ export default function Love4() {
         canvas.height
       );
 
+      // LUZ ROJA CENTRAL
+      const glow =
+        ctx.createRadialGradient(
+          canvas.width / 2 + offsetX,
+          canvas.height / 2,
+          20,
+          canvas.width / 2 + offsetX,
+          canvas.height / 2,
+          260
+        );
+
+      glow.addColorStop(
+        0,
+        "rgba(255,0,0,0.45)"
+      );
+
+      glow.addColorStop(
+        0.4,
+        "rgba(255,0,0,0.18)"
+      );
+
+      glow.addColorStop(
+        1,
+        "rgba(255,0,0,0)"
+      );
+
+      ctx.fillStyle = glow;
+
+      ctx.beginPath();
+
+      ctx.arc(
+        canvas.width / 2 + offsetX,
+        canvas.height / 2,
+        260,
+        0,
+        Math.PI * 2
+      );
+
+      ctx.fill();
+
       if (started) {
         frame++;
 
@@ -178,7 +220,7 @@ export default function Love4() {
       ctx.fillStyle = "#fff";
 
       ctx.shadowColor = "#ff0000";
-      ctx.shadowBlur = 45;
+      ctx.shadowBlur = 55;
 
       ctx.fillText(
         "I LOVE YOU",
