@@ -157,7 +157,7 @@ export default function Love4() {
         ) {
         bloodLevel +=
   window.innerWidth < 768
-    ? 2.2 // 📱 celular
+    ? 3.5 // 📱 celular
     : 0.7; // 💻 pc
 
           if (
