@@ -41,8 +41,6 @@ export default function Love4() {
       x: number;
       y: number;
 
-      size: number;
-
       delay: number;
 
       opacity = 0;
@@ -50,8 +48,7 @@ export default function Love4() {
       constructor(
         x: number,
         y: number,
-        delay: number,
-        size: number
+        delay: number
       ) {
         this.x =
           x +
@@ -62,8 +59,6 @@ export default function Love4() {
           (Math.random() - 0.5) * 10;
 
         this.delay = delay;
-
-        this.size = size;
       }
 
       update(frame: number) {
@@ -77,7 +72,10 @@ export default function Love4() {
 
         ctx.save();
 
-        ctx.font = `bold ${this.size}px Arial`;
+        // TODOS EXACTAMENTE
+        // DEL MISMO TAMAÑO
+        ctx.font =
+          "bold 18px Arial";
 
         ctx.fillStyle = `rgba(255,60,60,${this.opacity})`;
 
@@ -178,10 +176,6 @@ export default function Love4() {
               layer * 35 +
               sideIndex * 1.2;
 
-            // MÁS PEQUEÑOS
-            // HACIA EL CENTRO
-            const size = 9;
-
             particles.push(
               new Particle(
                 centerX +
@@ -196,8 +190,7 @@ export default function Love4() {
                     0.5) *
                     randomOffset,
 
-                delay,
-                size
+                delay
               )
             );
           });
