@@ -9,8 +9,12 @@ export default function Love4() {
     const ctx = canvas.getContext("2d")!;
 
     function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const parent = canvas.parentElement;
+
+      if (!parent) return;
+
+      canvas.width = parent.clientWidth;
+      canvas.height = parent.clientHeight;
     }
 
     resizeCanvas();
@@ -34,7 +38,7 @@ export default function Love4() {
         this.tx = tx;
         this.ty = ty;
 
-        this.size = Math.random() * 12 + 10;
+        this.size = Math.random() * 8 + 8;
         this.speed = Math.random() * 0.03 + 0.015;
         this.opacity = Math.random() * 0.5 + 0.5;
       }
@@ -62,11 +66,11 @@ export default function Love4() {
       particles.length = 0;
 
       const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2 - 50;
+      const centerY = canvas.height / 2 - 20;
 
-      const scale = Math.min(canvas.width, canvas.height) * 0.025;
+      const scale = Math.min(canvas.width, canvas.height) * 0.018;
 
-      for (let i = 0; i < 1200; i++) {
+      for (let i = 0; i < 900; i++) {
         const t = Math.random() * Math.PI * 2;
 
         const heartX = 16 * Math.pow(Math.sin(t), 3);
@@ -98,7 +102,9 @@ export default function Love4() {
 
       ctx.textAlign = "center";
 
-      ctx.font = "bold 80px Arial";
+      const mainTextSize = Math.min(canvas.width, canvas.height) * 0.08;
+
+      ctx.font = `bold ${mainTextSize}px Arial`;
       ctx.fillStyle = "white";
 
       ctx.fillText(
@@ -123,7 +129,7 @@ export default function Love4() {
     <div
       style={{
         width: "100%",
-        height: "100vh",
+        height: "100%",
         background: "black",
         position: "relative",
         overflow: "hidden",
@@ -134,6 +140,8 @@ export default function Love4() {
         style={{
           position: "absolute",
           inset: 0,
+          width: "100%",
+          height: "100%",
         }}
       />
 
@@ -141,20 +149,20 @@ export default function Love4() {
         <div
           style={{
             position: "absolute",
-            bottom: "70px",
+            bottom: "40px",
             left: "50%",
             transform: "translateX(-50%)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "20px",
+            gap: "15px",
             zIndex: 10,
           }}
         >
           <span
             style={{
               color: "white",
-              fontSize: "20px",
+              fontSize: "16px",
               letterSpacing: "2px",
             }}
           >
@@ -164,13 +172,13 @@ export default function Love4() {
           <button
             onClick={() => setStarted(true)}
             style={{
-              width: "90px",
-              height: "90px",
+              width: "75px",
+              height: "75px",
               borderRadius: "50%",
               border: "2px solid #ff2e63",
               background: "rgba(255,0,80,0.1)",
               color: "white",
-              fontSize: "40px",
+              fontSize: "35px",
               cursor: "pointer",
               boxShadow: "0 0 25px #ff2e63",
             }}
