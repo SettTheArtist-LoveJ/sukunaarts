@@ -27,23 +27,40 @@ export default function Love4() {
       y: number;
       tx: number;
       ty: number;
+
+      startX: number;
+      startY: number;
+
+      angle: number;
+      radius: number;
+
       size: number;
       speed: number;
       opacity: number;
 
-      constructor(tx: number, ty: number) {
-        // EMPIEZAN DESDE ABAJO DEL CORAZÓN
+      progress: number;
+
+      constructor(tx: number, ty: number, angle: number, radius: number) {
+        // empiezan desde el centro
         this.x = canvas.width / 2;
-        this.y = canvas.height + 100;
+        this.y = canvas.height / 2;
+
+        this.startX = canvas.width / 2;
+        this.startY = canvas.height / 2;
 
         this.tx = tx;
         this.ty = ty;
 
+        this.angle = angle;
+        this.radius = radius;
+
         this.size = Math.random() * 2 + 9;
 
-        this.speed = Math.random() * 0.025 + 0.015;
+        this.speed = Math.random() * 0.015 + 0.01;
 
         this.opacity = Math.random() * 0.3 + 0.7;
+
+        this.progress = 0;
       }
 
       draw() {
@@ -62,8 +79,31 @@ export default function Love4() {
       }
 
       update() {
-        this.x += (this.tx - this.x) * this.speed;
-        this.y += (this.ty - this.y) * this.speed;
+        this.progress += this.speed;
+
+        if (this.progress > 1) this.progress = 1;
+
+        // movimiento remolino
+        const spiral =
+          (1 - this.progress) * this.radius;
+
+        const swirlX =
+          Math.cos(this.angle + this.progress * 10) *
+          spiral;
+
+        const swirlY =
+          Math.sin(this.angle + this.progress * 10) *
+          spiral;
+
+        this.x =
+          this.startX +
+          (this.tx - this.startX) * this.progress +
+          swirlX;
+
+        this.y =
+          this.startY +
+          (this.ty - this.startY) * this.progress +
+          swirlY;
 
         this.draw();
       }
@@ -72,15 +112,16 @@ export default function Love4() {
     function createHeart() {
       particles.length = 0;
 
+      // MÁS CENTRADO
       const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2 - 10;
+      const centerY = canvas.height / 2 + 10;
 
       const scale =
-        Math.min(canvas.width, canvas.height) * 0.020;
+        Math.min(canvas.width, canvas.height) * 0.018;
 
-      // SOLO BORDE DEL CORAZÓN
       const total = 180;
 
+      // SOLO BORDE
       for (let i = 0; i < total; i++) {
         const t = (i / total) * Math.PI * 2;
 
@@ -96,14 +137,21 @@ export default function Love4() {
         const tx = centerX + heartX * scale;
         const ty = centerY + heartY * scale;
 
-        particles.push(new Particle(tx, ty));
+        const angle = Math.random() * Math.PI * 2;
+
+        const radius =
+          Math.random() * 250 + 100;
+
+        particles.push(
+          new Particle(tx, ty, angle, radius)
+        );
       }
     }
 
     createHeart();
 
     function animate() {
-      ctx.fillStyle = "rgba(0,0,0,0.10)";
+      ctx.fillStyle = "rgba(0,0,0,0.12)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       if (started) {
@@ -126,7 +174,7 @@ export default function Love4() {
       ctx.shadowBlur = 25;
 
       ctx.fillText(
-        "LOVE YOU",
+        "I LOVE YOU",
         canvas.width / 2,
         canvas.height / 2
       );
