@@ -30,15 +30,33 @@ export default function Love4() {
 
       size: number;
 
-      constructor(x: number, y: number) {
+      // APARICIÓN ALEATORIA
+      delay: number;
+
+      visible = false;
+
+      constructor(
+        x: number,
+        y: number,
+        delay: number
+      ) {
         this.x = x;
         this.y = y;
+
+        this.delay = delay;
 
         // MÁS PEQUEÑOS
         this.size = Math.random() * 2 + 9;
       }
 
-      draw() {
+      update(frame: number) {
+        // APARECEN POCO A POCO
+        if (frame >= this.delay) {
+          this.visible = true;
+        }
+
+        if (!this.visible) return;
+
         ctx.save();
 
         ctx.font = `bold ${this.size}px Arial`;
@@ -90,14 +108,21 @@ export default function Love4() {
             Math.cos(4 * t)
           );
 
+        // TIEMPO ALEATORIO MÁS LENTO
+        const randomDelay =
+          Math.random() * 300;
+
         particles.push(
           new Particle(
             centerX + x * scale,
-            centerY + y * scale
+            centerY + y * scale,
+            randomDelay
           )
         );
       }
     }
+
+    let frame = 0;
 
     function animate() {
       ctx.clearRect(
@@ -117,7 +142,11 @@ export default function Love4() {
       );
 
       if (started) {
-        particles.forEach((p) => p.draw());
+        frame++;
+
+        particles.forEach((p) =>
+          p.update(frame)
+        );
       }
 
       // TEXTO CENTRAL
