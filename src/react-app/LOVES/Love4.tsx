@@ -1,26 +1,38 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function Love4() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [started, setStarted] = useState(false);
+  const canvasRef =
+    useRef<HTMLCanvasElement>(null);
+
+  const [started, setStarted] =
+    useState(false);
 
   useEffect(() => {
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext("2d")!;
+    const canvas =
+      canvasRef.current!;
+
+    const ctx =
+      canvas.getContext("2d")!;
 
     let particles: Particle[] = [];
+
     let frame = 0;
+
     let animationId = 0;
 
     const offsetX = -55;
 
     const resizeCanvas = () => {
-      const parent = canvas.parentElement;
+      const parent =
+        canvas.parentElement;
 
       if (!parent) return;
 
-      canvas.width = parent.clientWidth;
-      canvas.height = parent.clientHeight;
+      canvas.width =
+        parent.clientWidth;
+
+      canvas.height =
+        parent.clientHeight;
 
       createHeart();
     };
@@ -30,6 +42,7 @@ export default function Love4() {
       y: number;
 
       size: number;
+
       delay: number;
 
       opacity = 0;
@@ -41,10 +54,12 @@ export default function Love4() {
         size: number
       ) {
         this.x =
-          x + (Math.random() - 0.5) * 10;
+          x +
+          (Math.random() - 0.5) * 10;
 
         this.y =
-          y + (Math.random() - 0.5) * 10;
+          y +
+          (Math.random() - 0.5) * 10;
 
         this.delay = delay;
 
@@ -52,7 +67,8 @@ export default function Love4() {
       }
 
       update(frame: number) {
-        if (frame < this.delay) return;
+        if (frame < this.delay)
+          return;
 
         // APARICIÓN SUAVE
         if (this.opacity < 1) {
@@ -66,6 +82,7 @@ export default function Love4() {
         ctx.fillStyle = `rgba(255,60,60,${this.opacity})`;
 
         ctx.shadowColor = "#ff0000";
+
         ctx.shadowBlur = 18;
 
         ctx.fillText(
@@ -93,8 +110,6 @@ export default function Love4() {
           canvas.height
         ) * 0.028;
 
-      // MÁS TEXTO PARA QUE EL CONTORNO
-      // SE VEA COMPLETO
       const total = 220;
 
       const heartLayers = 6;
@@ -105,55 +120,88 @@ export default function Love4() {
         layer++
       ) {
         const scale =
-          baseScale * (1 - layer * 0.14);
+          baseScale *
+          (1 - layer * 0.14);
 
-        for (let i = 0; i < total; i++) {
-          const t =
-            (i / total) * Math.PI * 2;
+        // GENERA DESDE LOS DOS LADOS
+        for (
+          let sideIndex = 0;
+          sideIndex < total / 2;
+          sideIndex++
+        ) {
+          // IZQUIERDA
+          const leftT =
+            (sideIndex / total) *
+            Math.PI *
+            2;
 
-          const x =
-            16 *
-            Math.pow(Math.sin(t), 3);
+          // DERECHA
+          const rightT =
+            ((total - sideIndex) /
+              total) *
+            Math.PI *
+            2;
 
-          const y =
-            -(
-              13 * Math.cos(t) -
-              5 * Math.cos(2 * t) -
-              2 * Math.cos(3 * t) -
-              Math.cos(4 * t)
+          const sides = [
+            leftT,
+            rightT,
+          ];
+
+          sides.forEach((t) => {
+            const x =
+              16 *
+              Math.pow(
+                Math.sin(t),
+                3
+              );
+
+            const y =
+              -(
+                13 * Math.cos(t) -
+                5 *
+                  Math.cos(2 * t) -
+                2 *
+                  Math.cos(3 * t) -
+                Math.cos(4 * t)
+              );
+
+            // EXTERIOR MÁS LIMPIO
+            let randomOffset = 10;
+
+            if (layer === 0) {
+              randomOffset = 2;
+            }
+
+            // LOS DOS LADOS
+            // CRECEN A LA VEZ
+            const delay =
+              layer * 35 +
+              sideIndex * 1.2;
+
+            // MÁS PEQUEÑOS
+            // HACIA EL CENTRO
+            const size =
+              11 - layer * 1.4;
+
+            particles.push(
+              new Particle(
+                centerX +
+                  x * scale +
+                  (Math.random() -
+                    0.5) *
+                    randomOffset,
+
+                centerY +
+                  y * scale +
+                  (Math.random() -
+                    0.5) *
+                    randomOffset,
+
+                delay,
+                size
+              )
             );
-
-          // CONTORNO EXTERIOR MÁS ORDENADO
-          let randomOffset = 10;
-
-          if (layer === 0) {
-            randomOffset = 2;
-          }
-
-          // EXTERIOR APARECE PRIMERO
-          const delay =
-            layer * 35 + i * 1.2;
-
-          // MÁS PEQUEÑOS HACIA EL CENTRO
-          const size =
-            11 - layer * 1.4;
-
-          particles.push(
-            new Particle(
-              centerX +
-                x * scale +
-                (Math.random() - 0.5) *
-                  randomOffset,
-
-              centerY +
-                y * scale +
-                (Math.random() - 0.5) *
-                  randomOffset,
-
-              delay,
-              size
-            )
-          );
+          });
         }
       }
     }
@@ -178,11 +226,18 @@ export default function Love4() {
       // LUZ ROJA CENTRAL
       const glow =
         ctx.createRadialGradient(
-          canvas.width / 2 + offsetX,
+          canvas.width / 2 +
+            offsetX,
+
           canvas.height / 2,
+
           20,
-          canvas.width / 2 + offsetX,
+
+          canvas.width / 2 +
+            offsetX,
+
           canvas.height / 2,
+
           260
         );
 
@@ -206,9 +261,13 @@ export default function Love4() {
       ctx.beginPath();
 
       ctx.arc(
-        canvas.width / 2 + offsetX,
+        canvas.width / 2 +
+          offsetX,
+
         canvas.height / 2,
+
         260,
+
         0,
         Math.PI * 2
       );
@@ -227,6 +286,7 @@ export default function Love4() {
       ctx.save();
 
       ctx.textAlign = "center";
+
       ctx.textBaseline = "middle";
 
       const textSize =
@@ -240,6 +300,7 @@ export default function Love4() {
       ctx.fillStyle = "#fff";
 
       ctx.shadowColor = "#ff0000";
+
       ctx.shadowBlur = 55;
 
       ctx.fillText(
@@ -251,13 +312,16 @@ export default function Love4() {
       ctx.restore();
 
       animationId =
-        requestAnimationFrame(animate);
+        requestAnimationFrame(
+          animate
+        );
     }
 
     resizeCanvas();
 
     if (started) {
       frame = 0;
+
       createHeart();
     }
 
@@ -269,7 +333,9 @@ export default function Love4() {
     animate();
 
     return () => {
-      cancelAnimationFrame(animationId);
+      cancelAnimationFrame(
+        animationId
+      );
 
       window.removeEventListener(
         "resize",
@@ -308,8 +374,12 @@ export default function Love4() {
               "translateX(-50%)",
 
             display: "flex",
-            flexDirection: "column",
+
+            flexDirection:
+              "column",
+
             alignItems: "center",
+
             gap: 15,
           }}
         >
@@ -319,7 +389,8 @@ export default function Love4() {
               letterSpacing: 2,
             }}
           >
-            HAZ CLICK PARA COMENZAR
+            HAZ CLICK PARA
+            COMENZAR
           </span>
 
           <button
@@ -329,7 +400,9 @@ export default function Love4() {
             style={{
               width: 75,
               height: 75,
+
               borderRadius: "50%",
+
               border:
                 "2px solid #ff0000",
 
@@ -337,7 +410,9 @@ export default function Love4() {
                 "rgba(255,0,0,.08)",
 
               color: "#fff",
+
               fontSize: 35,
+
               cursor: "pointer",
 
               boxShadow:
