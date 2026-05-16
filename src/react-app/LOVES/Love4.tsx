@@ -40,21 +40,18 @@ export default function Love4() {
         delay: number,
         size: number
       ) {
-        // DESORDEN PARA QUE CHOQUEN
         this.x =
-          x + (Math.random() - 0.5) * 18;
+          x + (Math.random() - 0.5) * 10;
 
         this.y =
-          y + (Math.random() - 0.5) * 18;
+          y + (Math.random() - 0.5) * 10;
 
         this.delay = delay;
 
-        // MÁS PEQUEÑOS HACIA EL CENTRO
         this.size = size;
       }
 
       update(frame: number) {
-        // ESPERAR TURNO
         if (frame < this.delay) return;
 
         // APARICIÓN SUAVE
@@ -96,9 +93,10 @@ export default function Love4() {
           canvas.height
         ) * 0.028;
 
-      const total = 120;
+      // MÁS TEXTO PARA QUE EL CONTORNO
+      // SE VEA COMPLETO
+      const total = 220;
 
-      // CANTIDAD DE CORAZONES
       const heartLayers = 6;
 
       for (
@@ -106,7 +104,6 @@ export default function Love4() {
         layer < heartLayers;
         layer++
       ) {
-        // REDUCCIÓN HACIA EL CENTRO
         const scale =
           baseScale * (1 - layer * 0.14);
 
@@ -126,19 +123,33 @@ export default function Love4() {
               Math.cos(4 * t)
             );
 
-          // APARICIÓN MÁS RÁPIDA
-          const delay =
-            Math.random() * 60 +
-            layer * 10;
+          // CONTORNO EXTERIOR MÁS ORDENADO
+          let randomOffset = 10;
 
-          // MÁS PEQUEÑOS EN EL CENTRO
+          if (layer === 0) {
+            randomOffset = 2;
+          }
+
+          // EXTERIOR APARECE PRIMERO
+          const delay =
+            layer * 35 + i * 1.2;
+
+          // MÁS PEQUEÑOS HACIA EL CENTRO
           const size =
             11 - layer * 1.4;
 
           particles.push(
             new Particle(
-              centerX + x * scale,
-              centerY + y * scale,
+              centerX +
+                x * scale +
+                (Math.random() - 0.5) *
+                  randomOffset,
+
+              centerY +
+                y * scale +
+                (Math.random() - 0.5) *
+                  randomOffset,
+
               delay,
               size
             )
@@ -164,7 +175,7 @@ export default function Love4() {
         canvas.height
       );
 
-      // LUZ NEÓN ROJA
+      // LUZ ROJA CENTRAL
       const glow =
         ctx.createRadialGradient(
           canvas.width / 2 + offsetX,
@@ -205,7 +216,6 @@ export default function Love4() {
       ctx.fill();
 
       if (started) {
-        // MÁS RÁPIDO
         frame += 2;
 
         particles.forEach((p) =>
@@ -246,7 +256,6 @@ export default function Love4() {
 
     resizeCanvas();
 
-    // REINICIAR AL ABRIR
     if (started) {
       frame = 0;
       createHeart();
