@@ -50,13 +50,8 @@ export default function Love4() {
         y: number,
         delay: number
       ) {
-        this.x =
-          x +
-          (Math.random() - 0.5) * 10;
-
-        this.y =
-          y +
-          (Math.random() - 0.5) * 10;
+        this.x = x;
+        this.y = y;
 
         this.delay = delay;
       }
@@ -65,15 +60,13 @@ export default function Love4() {
         if (frame < this.delay)
           return;
 
-        // APARICIÓN SUAVE
         if (this.opacity < 1) {
           this.opacity += 0.02;
         }
 
         ctx.save();
 
-        // TODOS EXACTAMENTE
-        // DEL MISMO TAMAÑO
+        // MISMO TAMAÑO
         ctx.font =
           "bold 18px Arial";
 
@@ -108,8 +101,6 @@ export default function Love4() {
           canvas.height
         ) * 0.028;
 
-      const total = 220;
-
       const heartLayers = 6;
 
       for (
@@ -121,19 +112,27 @@ export default function Love4() {
           baseScale *
           (1 - layer * 0.14);
 
-        // GENERA DESDE LOS DOS LADOS
+        // MENOS TEXTOS
+        // MIENTRAS MÁS
+        // AL CENTRO
+        const total =
+          220 - layer * 35;
+
+        // MÁS DISTANCIA
+        // ENTRE TEXTOS
+        const step = 3;
+
         for (
           let sideIndex = 0;
-          sideIndex < total / 2;
-          sideIndex++
+          sideIndex <
+          total / 2;
+          sideIndex += step
         ) {
-          // IZQUIERDA
           const leftT =
             (sideIndex / total) *
             Math.PI *
             2;
 
-          // DERECHA
           const rightT =
             ((total - sideIndex) /
               total) *
@@ -163,18 +162,16 @@ export default function Love4() {
                 Math.cos(4 * t)
               );
 
-            // EXTERIOR MÁS LIMPIO
-            let randomOffset = 10;
+            // MÁS LIMPIO
+            let randomOffset = 6;
 
             if (layer === 0) {
-              randomOffset = 2;
+              randomOffset = 1;
             }
 
-            // LOS DOS LADOS
-            // CRECEN A LA VEZ
             const delay =
-              layer * 35 +
-              sideIndex * 1.2;
+              layer * 40 +
+              sideIndex * 1.5;
 
             particles.push(
               new Particle(
@@ -215,7 +212,7 @@ export default function Love4() {
         canvas.height
       );
 
-      // LUZ ROJA CENTRAL
+      // LUZ ROJA
       const glow =
         ctx.createRadialGradient(
           canvas.width / 2 +
