@@ -10,7 +10,6 @@ export default function Love4() {
 
     let particles: Particle[] = [];
 
-    // AJUSTE VISUAL DEL CORAZÓN
     const offsetX = -55;
 
     const resizeCanvas = () => {
@@ -30,10 +29,9 @@ export default function Love4() {
 
       size: number;
 
-      // APARICIÓN ALEATORIA
       delay: number;
 
-      visible = false;
+      opacity = 0;
 
       constructor(
         x: number,
@@ -45,24 +43,23 @@ export default function Love4() {
 
         this.delay = delay;
 
-        // MÁS PEQUEÑOS
         this.size = Math.random() * 2 + 9;
       }
 
       update(frame: number) {
-        // APARECEN POCO A POCO
-        if (frame >= this.delay) {
-          this.visible = true;
-        }
+        // ESPERAR TURNO
+        if (frame < this.delay) return;
 
-        if (!this.visible) return;
+        // APARICIÓN LENTA
+        if (this.opacity < 1) {
+          this.opacity += 0.015;
+        }
 
         ctx.save();
 
         ctx.font = `bold ${this.size}px Arial`;
 
-        // ROJO NEÓN
-        ctx.fillStyle = "#ff3b3b";
+        ctx.fillStyle = `rgba(255,60,60,${this.opacity})`;
 
         ctx.shadowColor = "#ff0000";
         ctx.shadowBlur = 18;
@@ -108,15 +105,15 @@ export default function Love4() {
             Math.cos(4 * t)
           );
 
-        // TIEMPO ALEATORIO MÁS LENTO
-        const randomDelay =
-          Math.random() * 300;
+        // APARICIÓN ALEATORIA
+        const delay =
+          Math.random() * 350;
 
         particles.push(
           new Particle(
             centerX + x * scale,
             centerY + y * scale,
-            randomDelay
+            delay
           )
         );
       }
@@ -163,9 +160,8 @@ export default function Love4() {
 
       ctx.font = `bold ${textSize}px Arial`;
 
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = "#fff";
 
-      // EFECTO NEÓN ROJO
       ctx.shadowColor = "#ff0000";
       ctx.shadowBlur = 45;
 
