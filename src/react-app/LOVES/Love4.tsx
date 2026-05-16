@@ -155,7 +155,10 @@ export default function Love4() {
           window.innerHeight -
             bloodLevel
         ) {
-          bloodLevel += 0.7;
+        bloodLevel +=
+  window.innerWidth < 768
+    ? 2.2 // 📱 celular
+    : 0.7; // 💻 pc
 
           if (
             bloodLevel >
