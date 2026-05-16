@@ -1,8 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export default function LoveHeart() {
+export default function Love4() {
   const canvasRef =
     useRef<HTMLCanvasElement>(null);
+
+  const [started, setStarted] =
+    useState(false);
 
   useEffect(() => {
     const canvas =
@@ -17,8 +20,6 @@ export default function LoveHeart() {
 
     let animationId = 0;
 
-    // MISMO MÉTODO DE CENTRADO
-    // QUE TU CÓDIGO ORIGINAL
     const offsetX = -55;
 
     const resizeCanvas = () => {
@@ -40,6 +41,8 @@ export default function LoveHeart() {
       x: number;
       y: number;
 
+      size: number;
+
       delay: number;
 
       opacity = 0;
@@ -47,39 +50,40 @@ export default function LoveHeart() {
       constructor(
         x: number,
         y: number,
-        delay: number
+        delay: number,
+        size: number
       ) {
-        // MISMO CUADREO
-        // Y DISPERSIÓN
         this.x =
           x +
-          (Math.random() - 0.5) * 6;
+          (Math.random() - 0.5) * 10;
 
         this.y =
           y +
-          (Math.random() - 0.5) * 6;
+          (Math.random() - 0.5) * 10;
 
         this.delay = delay;
+
+        this.size = size;
       }
 
       update(frame: number) {
         if (frame < this.delay)
           return;
 
+        // APARICIÓN SUAVE
         if (this.opacity < 1) {
           this.opacity += 0.02;
         }
 
         ctx.save();
 
-        ctx.font =
-          "bold 20px Arial";
+        ctx.font = `bold ${this.size}px Arial`;
 
-        ctx.fillStyle = `rgba(255,182,193,${this.opacity})`;
+        ctx.fillStyle = `rgba(255,60,60,${this.opacity})`;
 
-        ctx.shadowColor = "#ff69b4";
+        ctx.shadowColor = "#ff0000";
 
-        ctx.shadowBlur = 22;
+        ctx.shadowBlur = 18;
 
         ctx.fillText(
           "I love you",
@@ -94,24 +98,21 @@ export default function LoveHeart() {
     function createHeart() {
       particles = [];
 
-      // MISMO CENTRADO
       const centerX =
         canvas.width / 2 + offsetX;
 
       const centerY =
         canvas.height / 2;
 
-      // MISMO MÉTODO
-      // DE ESCALADO
       const baseScale =
         Math.min(
           canvas.width,
           canvas.height
         ) * 0.028;
 
-      const total = 260;
+      const total = 220;
 
-      const heartLayers = 5;
+      const heartLayers = 6;
 
       for (
         let layer = 0;
@@ -120,20 +121,21 @@ export default function LoveHeart() {
       ) {
         const scale =
           baseScale *
-          (1 - layer * 0.12);
+          (1 - layer * 0.14);
 
+        // GENERA DESDE LOS DOS LADOS
         for (
           let sideIndex = 0;
           sideIndex < total / 2;
           sideIndex++
         ) {
-          // MISMO MÉTODO
-          // IZQUIERDA/DERECHA
+          // IZQUIERDA
           const leftT =
             (sideIndex / total) *
             Math.PI *
             2;
 
+          // DERECHA
           const rightT =
             ((total - sideIndex) /
               total) *
@@ -163,17 +165,22 @@ export default function LoveHeart() {
                 Math.cos(4 * t)
               );
 
-            // MISMO CUADREO
-            let randomOffset = 8;
+            // EXTERIOR MÁS LIMPIO
+            let randomOffset = 10;
 
             if (layer === 0) {
               randomOffset = 2;
             }
 
-            // MISMA ANIMACIÓN
+            // LOS DOS LADOS
+            // CRECEN A LA VEZ
             const delay =
-              layer * 30 +
+              layer * 35 +
               sideIndex * 1.2;
+
+            // MÁS PEQUEÑOS
+            // HACIA EL CENTRO
+            const size = 9;
 
             particles.push(
               new Particle(
@@ -189,7 +196,8 @@ export default function LoveHeart() {
                     0.5) *
                     randomOffset,
 
-                delay
+                delay,
+                size
               )
             );
           });
@@ -214,7 +222,7 @@ export default function LoveHeart() {
         canvas.height
       );
 
-      // MISMO GLOW CENTRAL
+      // LUZ ROJA CENTRAL
       const glow =
         ctx.createRadialGradient(
           canvas.width / 2 +
@@ -234,17 +242,17 @@ export default function LoveHeart() {
 
       glow.addColorStop(
         0,
-        "rgba(255,105,180,0.35)"
+        "rgba(255,0,0,0.45)"
       );
 
       glow.addColorStop(
         0.4,
-        "rgba(255,105,180,0.12)"
+        "rgba(255,0,0,0.18)"
       );
 
       glow.addColorStop(
         1,
-        "rgba(255,105,180,0)"
+        "rgba(255,0,0,0)"
       );
 
       ctx.fillStyle = glow;
@@ -265,11 +273,42 @@ export default function LoveHeart() {
 
       ctx.fill();
 
-      frame += 2;
+      if (started) {
+        frame += 2;
 
-      particles.forEach((p) =>
-        p.update(frame)
+        particles.forEach((p) =>
+          p.update(frame)
+        );
+      }
+
+      // TEXTO CENTRAL
+      ctx.save();
+
+      ctx.textAlign = "center";
+
+      ctx.textBaseline = "middle";
+
+      const textSize =
+        Math.min(
+          canvas.width,
+          canvas.height
+        ) * 0.075;
+
+      ctx.font = `bold ${textSize}px Arial`;
+
+      ctx.fillStyle = "#fff";
+
+      ctx.shadowColor = "#ff0000";
+
+      ctx.shadowBlur = 55;
+
+      ctx.fillText(
+        "I LOVE YOU",
+        canvas.width / 2 - 25,
+        canvas.height / 2
       );
+
+      ctx.restore();
 
       animationId =
         requestAnimationFrame(
@@ -279,12 +318,18 @@ export default function LoveHeart() {
 
     resizeCanvas();
 
-    animate();
+    if (started) {
+      frame = 0;
+
+      createHeart();
+    }
 
     window.addEventListener(
       "resize",
       resizeCanvas
     );
+
+    animate();
 
     return () => {
       cancelAnimationFrame(
@@ -296,7 +341,7 @@ export default function LoveHeart() {
         resizeCanvas
       );
     };
-  }, []);
+  }, [started]);
 
   return (
     <div
@@ -317,6 +362,66 @@ export default function LoveHeart() {
           height: "100%",
         }}
       />
+
+      {!started && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: 40,
+            left: "50%",
+            transform:
+              "translateX(-50%)",
+
+            display: "flex",
+
+            flexDirection:
+              "column",
+
+            alignItems: "center",
+
+            gap: 15,
+          }}
+        >
+          <span
+            style={{
+              color: "#fff",
+              letterSpacing: 2,
+            }}
+          >
+            HAZ CLICK PARA
+            COMENZAR
+          </span>
+
+          <button
+            onClick={() =>
+              setStarted(true)
+            }
+            style={{
+              width: 75,
+              height: 75,
+
+              borderRadius: "50%",
+
+              border:
+                "2px solid #ff0000",
+
+              background:
+                "rgba(255,0,0,.08)",
+
+              color: "#fff",
+
+              fontSize: 35,
+
+              cursor: "pointer",
+
+              boxShadow:
+                "0 0 35px #ff0000",
+            }}
+          >
+            ♡
+          </button>
+        </div>
+      )}
     </div>
   );
 }
