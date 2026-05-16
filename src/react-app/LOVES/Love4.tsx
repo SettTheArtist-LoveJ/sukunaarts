@@ -90,17 +90,17 @@ export default function Love4() {
 
       const total = 120;
 
-      // CANTIDAD DE CORAZONES
-      const heartLayers = 7;
+      // MENOS CORAZONES Y MÁS ESPACIO
+      const heartLayers = 5;
 
       for (
         let layer = 0;
         layer < heartLayers;
         layer++
       ) {
-        // CADA CORAZÓN MÁS PEQUEÑO
+        // MÁS DISTANCIA ENTRE CADA CORAZÓN
         const scale =
-          baseScale * (1 - layer * 0.12);
+          baseScale * (1 - layer * 0.20);
 
         for (let i = 0; i < total; i++) {
           const t =
@@ -121,7 +121,7 @@ export default function Love4() {
           // APARICIÓN ALEATORIA
           const delay =
             Math.random() * 100 +
-            layer * 20;
+            layer * 25;
 
           particles.push(
             new Particle(
