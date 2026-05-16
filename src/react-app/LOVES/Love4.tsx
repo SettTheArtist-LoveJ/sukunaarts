@@ -32,18 +32,19 @@ export default function Love4() {
       opacity: number;
 
       constructor(tx: number, ty: number) {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
+        // empiezan desde el centro
+        this.x = canvas.width / 2;
+        this.y = canvas.height / 2;
 
         this.tx = tx;
         this.ty = ty;
 
-        // TEXTO MÁS PEQUEÑO
-        this.size = Math.random() * 4 + 8;
+        // tamaño similar a la imagen
+        this.size = Math.random() * 3 + 10;
 
-        this.speed = Math.random() * 0.025 + 0.01;
+        this.speed = Math.random() * 0.02 + 0.01;
 
-        this.opacity = Math.random() * 0.4 + 0.6;
+        this.opacity = Math.random() * 0.3 + 0.7;
       }
 
       draw() {
@@ -51,10 +52,10 @@ export default function Love4() {
 
         ctx.font = `${this.size}px Arial`;
 
-        ctx.fillStyle = `rgba(255,90,150,${this.opacity})`;
+        ctx.fillStyle = `rgba(255,120,170,${this.opacity})`;
 
         ctx.shadowColor = "#ff2e88";
-        ctx.shadowBlur = 6;
+        ctx.shadowBlur = 8;
 
         ctx.fillText("i love you", this.x, this.y);
 
@@ -77,36 +78,36 @@ export default function Love4() {
 
       const scale = Math.min(canvas.width, canvas.height) * 0.020;
 
-      // MENOS PARTÍCULAS
-      for (let i = 0; i < 1400; i++) {
+      // MUCHAS MENOS partículas
+      for (let i = 0; i < 500; i++) {
         const t = Math.random() * Math.PI * 2;
 
-        const borderX = 16 * Math.pow(Math.sin(t), 3);
+        const heartX = 16 * Math.pow(Math.sin(t), 3);
 
-        const borderY =
+        const heartY =
           -(13 * Math.cos(t) -
             5 * Math.cos(2 * t) -
             2 * Math.cos(3 * t) -
             Math.cos(4 * t));
 
-        // RELLENO INTERIOR
+        // relleno tipo imagen
         const fill = Math.sqrt(Math.random());
 
-        const x = borderX * fill;
-        const y = borderY * fill;
+        const x = heartX * fill;
+        const y = heartY * fill;
 
-        // ESPACIADO MÁS NATURAL
-        const spread = 8;
+        // separación natural
+        const spacing = 18;
 
         const tx =
           centerX +
           x * scale +
-          (Math.random() - 0.5) * spread;
+          (Math.random() - 0.5) * spacing;
 
         const ty =
           centerY +
           y * scale +
-          (Math.random() - 0.5) * spread;
+          (Math.random() - 0.5) * spacing;
 
         particles.push(new Particle(tx, ty));
       }
@@ -115,7 +116,7 @@ export default function Love4() {
     createHeart();
 
     function animate() {
-      ctx.fillStyle = "rgba(0,0,0,0.18)";
+      ctx.fillStyle = "rgba(0,0,0,0.08)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       if (started) {
@@ -128,14 +129,14 @@ export default function Love4() {
       ctx.textAlign = "center";
 
       const mainTextSize =
-        Math.min(canvas.width, canvas.height) * 0.08;
+        Math.min(canvas.width, canvas.height) * 0.075;
 
       ctx.font = `bold ${mainTextSize}px Arial`;
 
-      ctx.fillStyle = "#ff5fa2";
+      ctx.fillStyle = "#ffffff";
 
       ctx.shadowColor = "#ff2e88";
-      ctx.shadowBlur = 30;
+      ctx.shadowBlur = 25;
 
       ctx.fillText(
         "LOVE YOU",
