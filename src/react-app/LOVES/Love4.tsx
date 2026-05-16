@@ -82,7 +82,7 @@ export default function Love4() {
 
       const centerY = canvas.height / 2;
 
-      const scale =
+      const baseScale =
         Math.min(
           canvas.width,
           canvas.height
@@ -90,32 +90,47 @@ export default function Love4() {
 
       const total = 120;
 
-      for (let i = 0; i < total; i++) {
-        const t =
-          (i / total) * Math.PI * 2;
+      // CANTIDAD DE CORAZONES
+      const heartLayers = 7;
 
-        const x =
-          16 * Math.pow(Math.sin(t), 3);
+      for (
+        let layer = 0;
+        layer < heartLayers;
+        layer++
+      ) {
+        // CADA CORAZÓN MÁS PEQUEÑO
+        const scale =
+          baseScale * (1 - layer * 0.12);
 
-        const y =
-          -(
-            13 * Math.cos(t) -
-            5 * Math.cos(2 * t) -
-            2 * Math.cos(3 * t) -
-            Math.cos(4 * t)
+        for (let i = 0; i < total; i++) {
+          const t =
+            (i / total) * Math.PI * 2;
+
+          const x =
+            16 *
+            Math.pow(Math.sin(t), 3);
+
+          const y =
+            -(
+              13 * Math.cos(t) -
+              5 * Math.cos(2 * t) -
+              2 * Math.cos(3 * t) -
+              Math.cos(4 * t)
+            );
+
+          // APARICIÓN ALEATORIA
+          const delay =
+            Math.random() * 100 +
+            layer * 20;
+
+          particles.push(
+            new Particle(
+              centerX + x * scale,
+              centerY + y * scale,
+              delay
+            )
           );
-
-        // APARICIÓN ALEATORIA
-        const delay =
-          Math.random() * 100;
-
-        particles.push(
-          new Particle(
-            centerX + x * scale,
-            centerY + y * scale,
-            delay
-          )
-        );
+        }
       }
     }
 
