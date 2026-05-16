@@ -32,17 +32,16 @@ export default function Love4() {
       opacity: number;
 
       constructor(tx: number, ty: number) {
-        // empiezan desde el centro
+        // EMPIEZAN DESDE ABAJO DEL CORAZÓN
         this.x = canvas.width / 2;
-        this.y = canvas.height / 2;
+        this.y = canvas.height + 100;
 
         this.tx = tx;
         this.ty = ty;
 
-        // tamaño más limpio
         this.size = Math.random() * 2 + 9;
 
-        this.speed = Math.random() * 0.02 + 0.01;
+        this.speed = Math.random() * 0.025 + 0.015;
 
         this.opacity = Math.random() * 0.3 + 0.7;
       }
@@ -79,9 +78,11 @@ export default function Love4() {
       const scale =
         Math.min(canvas.width, canvas.height) * 0.020;
 
-      // BORDE DEL CORAZÓN
-      for (let i = 0; i < 170; i++) {
-        const t = (i / 170) * Math.PI * 2;
+      // SOLO BORDE DEL CORAZÓN
+      const total = 180;
+
+      for (let i = 0; i < total; i++) {
+        const t = (i / total) * Math.PI * 2;
 
         const heartX =
           16 * Math.pow(Math.sin(t), 3);
@@ -97,25 +98,12 @@ export default function Love4() {
 
         particles.push(new Particle(tx, ty));
       }
-
-      // BRILLO CENTRAL
-      for (let i = 0; i < 35; i++) {
-        const offsetX = (Math.random() - 0.5) * 50;
-        const offsetY = (Math.random() - 0.5) * 50;
-
-        particles.push(
-          new Particle(
-            centerX + offsetX,
-            centerY - 20 + offsetY
-          )
-        );
-      }
     }
 
     createHeart();
 
     function animate() {
-      ctx.fillStyle = "rgba(0,0,0,0.08)";
+      ctx.fillStyle = "rgba(0,0,0,0.10)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       if (started) {
