@@ -2,7 +2,7 @@ import { useState } from "react";
 import Love1 from "./LOVES/Love1";
 import Love2 from "./LOVES/Love2";
 import Love3 from "./LOVES/Love3";
-import Love4 from "./LOVES/Love3";
+import Love4 from "./LOVES/Love4";
 
 export default function Secret() {
   const [date, setDate] = useState("");
