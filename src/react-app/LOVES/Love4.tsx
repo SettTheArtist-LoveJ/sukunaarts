@@ -9,6 +9,8 @@ export default function Love4() {
     const ctx = canvas.getContext("2d")!;
 
     let particles: Particle[] = [];
+    let frame = 0;
+    let animationId = 0;
 
     const offsetX = -55;
 
@@ -28,7 +30,6 @@ export default function Love4() {
       y: number;
 
       size: number;
-
       delay: number;
 
       opacity = 0;
@@ -48,16 +49,17 @@ export default function Love4() {
 
         this.delay = delay;
 
-        // TAMAÑO VARIABLE
+        // MÁS PEQUEÑOS HACIA EL CENTRO
         this.size = size;
       }
 
       update(frame: number) {
+        // ESPERAR TURNO
         if (frame < this.delay) return;
 
-        // APARICIÓN LENTA
+        // APARICIÓN SUAVE
         if (this.opacity < 1) {
-          this.opacity += 0.015;
+          this.opacity += 0.02;
         }
 
         ctx.save();
@@ -85,7 +87,8 @@ export default function Love4() {
       const centerX =
         canvas.width / 2 + offsetX;
 
-      const centerY = canvas.height / 2;
+      const centerY =
+        canvas.height / 2;
 
       const baseScale =
         Math.min(
@@ -95,7 +98,7 @@ export default function Love4() {
 
       const total = 120;
 
-      // MÁS CORAZONES
+      // CANTIDAD DE CORAZONES
       const heartLayers = 6;
 
       for (
@@ -103,7 +106,7 @@ export default function Love4() {
         layer < heartLayers;
         layer++
       ) {
-        // MÁS JUNTOS
+        // REDUCCIÓN HACIA EL CENTRO
         const scale =
           baseScale * (1 - layer * 0.14);
 
@@ -123,13 +126,14 @@ export default function Love4() {
               Math.cos(4 * t)
             );
 
+          // APARICIÓN MÁS RÁPIDA
           const delay =
-            Math.random() * 100 +
-            layer * 20;
+            Math.random() * 60 +
+            layer * 10;
 
-          // MÁS PEQUEÑOS HACIA EL CENTRO
+          // MÁS PEQUEÑOS EN EL CENTRO
           const size =
-            11 - layer * 1.3;
+            11 - layer * 1.4;
 
           particles.push(
             new Particle(
@@ -142,8 +146,6 @@ export default function Love4() {
         }
       }
     }
-
-    let frame = 0;
 
     function animate() {
       ctx.clearRect(
@@ -162,7 +164,7 @@ export default function Love4() {
         canvas.height
       );
 
-      // LUZ ROJA CENTRAL
+      // LUZ NEÓN ROJA
       const glow =
         ctx.createRadialGradient(
           canvas.width / 2 + offsetX,
@@ -203,7 +205,8 @@ export default function Love4() {
       ctx.fill();
 
       if (started) {
-        frame++;
+        // MÁS RÁPIDO
+        frame += 2;
 
         particles.forEach((p) =>
           p.update(frame)
@@ -237,10 +240,17 @@ export default function Love4() {
 
       ctx.restore();
 
-      requestAnimationFrame(animate);
+      animationId =
+        requestAnimationFrame(animate);
     }
 
     resizeCanvas();
+
+    // REINICIAR AL ABRIR
+    if (started) {
+      frame = 0;
+      createHeart();
+    }
 
     window.addEventListener(
       "resize",
@@ -249,11 +259,14 @@ export default function Love4() {
 
     animate();
 
-    return () =>
+    return () => {
+      cancelAnimationFrame(animationId);
+
       window.removeEventListener(
         "resize",
         resizeCanvas
       );
+    };
   }, [started]);
 
   return (
