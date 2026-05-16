@@ -41,10 +41,10 @@ export default function Love4() {
       progress: number;
 
       constructor(tx: number, ty: number, angle: number, radius: number) {
-        this.x = canvas.width / 2;
+        this.x = canvas.width / 2 - 70;
         this.y = canvas.height / 2;
 
-        this.startX = canvas.width / 2;
+        this.startX = canvas.width / 2 - 70;
         this.startY = canvas.height / 2;
 
         this.tx = tx;
@@ -53,12 +53,12 @@ export default function Love4() {
         this.angle = angle;
         this.radius = radius;
 
-        // TEXTO MÁS GRANDE
-        this.size = Math.random() * 4 + 12;
+        // MÁS GRANDES
+        this.size = Math.random() * 5 + 15;
 
         this.speed = Math.random() * 0.015 + 0.01;
 
-        this.opacity = Math.random() * 0.3 + 0.7;
+        this.opacity = Math.random() * 0.25 + 0.75;
 
         this.progress = 0;
       }
@@ -111,17 +111,17 @@ export default function Love4() {
     function createHeart() {
       particles.length = 0;
 
-      // MÁS A LA IZQUIERDA
-      const centerX = canvas.width / 2 - 55;
+      // MÁS A LA IZQUIERDA PARA CENTRAR VISUALMENTE
+      const centerX = canvas.width / 2 - 70;
 
       const centerY = canvas.height / 2;
 
-      // MÁS GRANDE
+      // CORAZÓN MÁS GRANDE
       const scale =
-        Math.min(canvas.width, canvas.height) * 0.03;
+        Math.min(canvas.width, canvas.height) * 0.032;
 
-      // MENOS PARTÍCULAS PARA MÁS ESPACIO
-      const total = 170;
+      // MENOS PARTÍCULAS = MÁS ESPACIO ENTRE TEXTOS
+      const total = 115;
 
       for (let i = 0; i < total; i++) {
         const t = (i / total) * Math.PI * 2;
@@ -173,11 +173,11 @@ export default function Love4() {
       ctx.fillStyle = "#ffffff";
 
       ctx.shadowColor = "#ff2e88";
-      ctx.shadowBlur = 35;
+      ctx.shadowBlur = 40;
 
       ctx.fillText(
         "I LOVE YOU",
-        canvas.width / 2 - 55,
+        canvas.width / 2 - 70,
         canvas.height / 2
       );
 
