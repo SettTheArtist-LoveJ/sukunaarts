@@ -249,7 +249,7 @@ export default function Love4() {
 
       const total =
         window.innerWidth < 768
-          ? 120
+          ? 70
           : 70;
 
       const heartLayers = 3;
