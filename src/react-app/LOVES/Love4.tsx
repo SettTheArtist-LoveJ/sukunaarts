@@ -41,12 +41,12 @@ export default function Love4() {
       progress: number;
 
       constructor(tx: number, ty: number, angle: number, radius: number) {
-        // empiezan desde el centro
+        // empiezan desde el centro del texto
         this.x = canvas.width / 2;
-        this.y = canvas.height / 2;
+        this.y = canvas.height / 2 - 10;
 
         this.startX = canvas.width / 2;
-        this.startY = canvas.height / 2;
+        this.startY = canvas.height / 2 - 10;
 
         this.tx = tx;
         this.ty = ty;
@@ -112,12 +112,15 @@ export default function Love4() {
     function createHeart() {
       particles.length = 0;
 
-      // MÁS CENTRADO
+      // CORAZÓN PERFECTAMENTE CENTRADO
       const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2 + 10;
 
+      // subido para encerrar el texto
+      const centerY = canvas.height / 2 - 80;
+
+      // corazón más grande
       const scale =
-        Math.min(canvas.width, canvas.height) * 0.018;
+        Math.min(canvas.width, canvas.height) * 0.022;
 
       const total = 180;
 
@@ -176,7 +179,7 @@ export default function Love4() {
       ctx.fillText(
         "I LOVE YOU",
         canvas.width / 2,
-        canvas.height / 2
+        canvas.height / 2 - 10
       );
 
       ctx.restore();
