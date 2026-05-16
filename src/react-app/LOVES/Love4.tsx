@@ -28,68 +28,17 @@ export default function Love4() {
       x: number;
       y: number;
 
-      tx: number;
-      ty: number;
-
-      angle: number;
-      radius: number;
-
       size: number;
-      speed: number;
 
-      progress = 0;
-
-      constructor(
-        tx: number,
-        ty: number,
-        angle: number,
-        radius: number
-      ) {
-        this.x = canvas.width / 2 + offsetX;
-        this.y = canvas.height / 2;
-
-        this.tx = tx;
-        this.ty = ty;
-
-        this.angle = angle;
-        this.radius = radius;
+      constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
 
         // MÁS PEQUEÑOS
         this.size = Math.random() * 2 + 9;
-
-        this.speed =
-          Math.random() * 0.012 + 0.008;
       }
 
-      update() {
-        this.progress = Math.min(
-          this.progress + this.speed,
-          1
-        );
-
-        const spiral =
-          (1 - this.progress) * this.radius;
-
-        this.x =
-          canvas.width / 2 +
-          offsetX +
-          (this.tx -
-            (canvas.width / 2 + offsetX)) *
-            this.progress +
-          Math.cos(
-            this.angle + this.progress * 10
-          ) *
-            spiral;
-
-        this.y =
-          canvas.height / 2 +
-          (this.ty - canvas.height / 2) *
-            this.progress +
-          Math.sin(
-            this.angle + this.progress * 10
-          ) *
-            spiral;
-
+      draw() {
         ctx.save();
 
         ctx.font = `bold ${this.size}px Arial`;
@@ -144,16 +93,21 @@ export default function Love4() {
         particles.push(
           new Particle(
             centerX + x * scale,
-            centerY + y * scale,
-            Math.random() * Math.PI * 2,
-            Math.random() * 300 + 150
+            centerY + y * scale
           )
         );
       }
     }
 
     function animate() {
-      ctx.fillStyle = "rgba(0,0,0,0.12)";
+      ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      ctx.fillStyle = "#000";
 
       ctx.fillRect(
         0,
@@ -163,7 +117,7 @@ export default function Love4() {
       );
 
       if (started) {
-        particles.forEach((p) => p.update());
+        particles.forEach((p) => p.draw());
       }
 
       // TEXTO CENTRAL
@@ -188,8 +142,8 @@ export default function Love4() {
 
       ctx.fillText(
         "I LOVE YOU",
-      canvas.width / 2 - 25,
-      canvas.height / 2
+        canvas.width / 2 - 25,
+        canvas.height / 2
       );
 
       ctx.restore();
