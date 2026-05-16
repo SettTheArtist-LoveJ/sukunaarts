@@ -10,7 +10,7 @@ export default function Love4() {
 
     let particles: Particle[] = [];
 
-    // SOLO EL CORAZÓN SE MUEVE
+    // AJUSTE VISUAL DEL CORAZÓN
     const offsetX = -55;
 
     const resizeCanvas = () => {
@@ -54,7 +54,8 @@ export default function Love4() {
         this.angle = angle;
         this.radius = radius;
 
-        this.size = Math.random() * 4 + 14;
+        // MÁS PEQUEÑOS
+        this.size = Math.random() * 2 + 9;
 
         this.speed =
           Math.random() * 0.012 + 0.008;
@@ -93,10 +94,11 @@ export default function Love4() {
 
         ctx.font = `bold ${this.size}px Arial`;
 
-        ctx.fillStyle = "#ffc0da";
+        // ROJO NEÓN
+        ctx.fillStyle = "#ff3b3b";
 
-        ctx.shadowColor = "#ff4f9a";
-        ctx.shadowBlur = 15;
+        ctx.shadowColor = "#ff0000";
+        ctx.shadowBlur = 18;
 
         ctx.fillText(
           "I love you",
@@ -111,7 +113,6 @@ export default function Love4() {
     function createHeart() {
       particles = [];
 
-      // CORAZÓN CENTRADO VISUALMENTE
       const centerX =
         canvas.width / 2 + offsetX;
 
@@ -179,12 +180,12 @@ export default function Love4() {
 
       ctx.font = `bold ${textSize}px Arial`;
 
-      ctx.fillStyle = "#fff";
+      ctx.fillStyle = "#ffffff";
 
-      ctx.shadowColor = "#ff2e88";
-      ctx.shadowBlur = 40;
+      // EFECTO NEÓN ROJO
+      ctx.shadowColor = "#ff0000";
+      ctx.shadowBlur = 45;
 
-      // TEXTO PERFECTAMENTE CENTRADO
       ctx.fillText(
         "I LOVE YOU",
         canvas.width / 2,
@@ -265,17 +266,17 @@ export default function Love4() {
               height: 75,
               borderRadius: "50%",
               border:
-                "2px solid #ff2e63",
+                "2px solid #ff0000",
 
               background:
-                "rgba(255,0,80,.08)",
+                "rgba(255,0,0,.08)",
 
               color: "#fff",
               fontSize: 35,
               cursor: "pointer",
 
               boxShadow:
-                "0 0 35px #ff2e88",
+                "0 0 35px #ff0000",
             }}
           >
             ♡
