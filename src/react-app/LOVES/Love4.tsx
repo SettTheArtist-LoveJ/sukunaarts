@@ -39,8 +39,8 @@ export default function Love4() {
         this.tx = tx;
         this.ty = ty;
 
-        // tamaño similar a la imagen
-        this.size = Math.random() * 3 + 10;
+        // tamaño más limpio
+        this.size = Math.random() * 2 + 9;
 
         this.speed = Math.random() * 0.02 + 0.01;
 
@@ -52,12 +52,12 @@ export default function Love4() {
 
         ctx.font = `${this.size}px Arial`;
 
-        ctx.fillStyle = `rgba(255,120,170,${this.opacity})`;
+        ctx.fillStyle = `rgba(255,190,220,${this.opacity})`;
 
-        ctx.shadowColor = "#ff2e88";
-        ctx.shadowBlur = 8;
+        ctx.shadowColor = "#ff5fa2";
+        ctx.shadowBlur = 10;
 
-        ctx.fillText("i love you", this.x, this.y);
+        ctx.fillText("I love you", this.x, this.y);
 
         ctx.restore();
       }
@@ -76,13 +76,15 @@ export default function Love4() {
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2 - 10;
 
-      const scale = Math.min(canvas.width, canvas.height) * 0.020;
+      const scale =
+        Math.min(canvas.width, canvas.height) * 0.020;
 
-      // MUCHAS MENOS partículas
-      for (let i = 0; i < 500; i++) {
-        const t = Math.random() * Math.PI * 2;
+      // BORDE DEL CORAZÓN
+      for (let i = 0; i < 170; i++) {
+        const t = (i / 170) * Math.PI * 2;
 
-        const heartX = 16 * Math.pow(Math.sin(t), 3);
+        const heartX =
+          16 * Math.pow(Math.sin(t), 3);
 
         const heartY =
           -(13 * Math.cos(t) -
@@ -90,26 +92,23 @@ export default function Love4() {
             2 * Math.cos(3 * t) -
             Math.cos(4 * t));
 
-        // relleno tipo imagen
-        const fill = Math.sqrt(Math.random());
-
-        const x = heartX * fill;
-        const y = heartY * fill;
-
-        // separación natural
-        const spacing = 18;
-
-        const tx =
-          centerX +
-          x * scale +
-          (Math.random() - 0.5) * spacing;
-
-        const ty =
-          centerY +
-          y * scale +
-          (Math.random() - 0.5) * spacing;
+        const tx = centerX + heartX * scale;
+        const ty = centerY + heartY * scale;
 
         particles.push(new Particle(tx, ty));
+      }
+
+      // BRILLO CENTRAL
+      for (let i = 0; i < 35; i++) {
+        const offsetX = (Math.random() - 0.5) * 50;
+        const offsetY = (Math.random() - 0.5) * 50;
+
+        particles.push(
+          new Particle(
+            centerX + offsetX,
+            centerY - 20 + offsetY
+          )
+        );
       }
     }
 
