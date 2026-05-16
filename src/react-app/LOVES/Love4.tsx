@@ -38,21 +38,25 @@ export default function Love4() {
         this.tx = tx;
         this.ty = ty;
 
-        this.size = Math.random() * 7 + 7;
-        this.speed = Math.random() * 0.03 + 0.015;
-        this.opacity = Math.random() * 0.5 + 0.5;
+        // TEXTO MÁS PEQUEÑO
+        this.size = Math.random() * 4 + 8;
+
+        this.speed = Math.random() * 0.025 + 0.01;
+
+        this.opacity = Math.random() * 0.4 + 0.6;
       }
 
       draw() {
         ctx.save();
 
         ctx.font = `${this.size}px Arial`;
-        ctx.fillStyle = `rgba(255,70,140,${this.opacity})`;
+
+        ctx.fillStyle = `rgba(255,90,150,${this.opacity})`;
 
         ctx.shadowColor = "#ff2e88";
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 6;
 
-        ctx.fillText("I LOVE YOU", this.x, this.y);
+        ctx.fillText("i love you", this.x, this.y);
 
         ctx.restore();
       }
@@ -69,12 +73,12 @@ export default function Love4() {
       particles.length = 0;
 
       const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2 - 20;
+      const centerY = canvas.height / 2 - 10;
 
-      const scale = Math.min(canvas.width, canvas.height) * 0.022;
+      const scale = Math.min(canvas.width, canvas.height) * 0.020;
 
-      // MUCHAS partículas para rellenar todo el corazón
-      for (let i = 0; i < 4500; i++) {
+      // MENOS PARTÍCULAS
+      for (let i = 0; i < 1400; i++) {
         const t = Math.random() * Math.PI * 2;
 
         const borderX = 16 * Math.pow(Math.sin(t), 3);
@@ -85,14 +89,24 @@ export default function Love4() {
             2 * Math.cos(3 * t) -
             Math.cos(4 * t));
 
-        // relleno interior
-        const fill = Math.random();
+        // RELLENO INTERIOR
+        const fill = Math.sqrt(Math.random());
 
         const x = borderX * fill;
         const y = borderY * fill;
 
-        const tx = centerX + x * scale;
-        const ty = centerY + y * scale;
+        // ESPACIADO MÁS NATURAL
+        const spread = 8;
+
+        const tx =
+          centerX +
+          x * scale +
+          (Math.random() - 0.5) * spread;
+
+        const ty =
+          centerY +
+          y * scale +
+          (Math.random() - 0.5) * spread;
 
         particles.push(new Particle(tx, ty));
       }
@@ -101,29 +115,30 @@ export default function Love4() {
     createHeart();
 
     function animate() {
-      ctx.fillStyle = "rgba(0,0,0,0.12)";
+      ctx.fillStyle = "rgba(0,0,0,0.18)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       if (started) {
         particles.forEach((p) => p.update());
       }
 
-      // TEXTO CENTRAL NEON
+      // TEXTO CENTRAL
       ctx.save();
 
       ctx.textAlign = "center";
 
-      const mainTextSize = Math.min(canvas.width, canvas.height) * 0.08;
+      const mainTextSize =
+        Math.min(canvas.width, canvas.height) * 0.08;
 
       ctx.font = `bold ${mainTextSize}px Arial`;
 
-      ctx.fillStyle = "#ff4da6";
+      ctx.fillStyle = "#ff5fa2";
 
       ctx.shadowColor = "#ff2e88";
-      ctx.shadowBlur = 35;
+      ctx.shadowBlur = 30;
 
       ctx.fillText(
-        "I LOVE YOU",
+        "LOVE YOU",
         canvas.width / 2,
         canvas.height / 2
       );
