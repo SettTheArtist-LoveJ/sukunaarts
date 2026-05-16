@@ -41,7 +41,7 @@ export default function Love4() {
       progress: number;
 
       constructor(tx: number, ty: number, angle: number, radius: number) {
-        // empiezan desde el centro del texto
+        // empiezan desde el centro
         this.x = canvas.width / 2;
         this.y = canvas.height / 2;
 
@@ -71,7 +71,7 @@ export default function Love4() {
         ctx.fillStyle = `rgba(255,190,220,${this.opacity})`;
 
         ctx.shadowColor = "#ff5fa2";
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 12;
 
         ctx.fillText("I love you", this.x, this.y);
 
@@ -112,17 +112,19 @@ export default function Love4() {
     function createHeart() {
       particles.length = 0;
 
-      // CENTRO EXACTO
-      const centerX = canvas.width / 2;
+      // MÁS A LA IZQUIERDA PARA CENTRAR VISUALMENTE
+      const centerX = canvas.width / 2 - 35;
+
+      // centro vertical
       const centerY = canvas.height / 2;
 
-      // tamaño corazón
+      // CORAZÓN MÁS GRANDE
       const scale =
-        Math.min(canvas.width, canvas.height) * 0.022;
+        Math.min(canvas.width, canvas.height) * 0.028;
 
-      const total = 180;
+      // MÁS PARTÍCULAS
+      const total = 260;
 
-      // SOLO BORDE
       for (let i = 0; i < total; i++) {
         const t = (i / total) * Math.PI * 2;
 
@@ -159,7 +161,7 @@ export default function Love4() {
         particles.forEach((p) => p.update());
       }
 
-      // TEXTO CENTRAL PERFECTAMENTE CENTRADO
+      // TEXTO CENTRAL
       ctx.save();
 
       ctx.textAlign = "center";
@@ -173,11 +175,11 @@ export default function Love4() {
       ctx.fillStyle = "#ffffff";
 
       ctx.shadowColor = "#ff2e88";
-      ctx.shadowBlur = 25;
+      ctx.shadowBlur = 30;
 
       ctx.fillText(
         "I LOVE YOU",
-        canvas.width / 2,
+        canvas.width / 2 - 35,
         canvas.height / 2
       );
 
