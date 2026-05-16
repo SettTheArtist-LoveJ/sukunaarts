@@ -30,7 +30,6 @@ export default function Love4() {
 
     ctx.textBaseline = "middle";
 
-    // 🔥 ADAPTAR A CELULAR
     const resizeCanvas = () => {
       const dpr =
         window.devicePixelRatio || 1;
@@ -54,6 +53,8 @@ export default function Love4() {
 
       y: number;
 
+      originalY: number;
+
       size: number;
 
       delay: number;
@@ -62,16 +63,28 @@ export default function Love4() {
 
       active = false;
 
+      // 🔥 MUCHOS SE CAERÁN
+      falling =
+        Math.random() < 0.45;
+
+      landed = false;
+
+      speedY =
+        Math.random() * 1 + 0.5;
+
       constructor(
         x: number,
         y: number,
         delay: number
       ) {
         this.x = x;
+
         this.y = y;
+
+        this.originalY = y;
+
         this.delay = delay;
 
-        // 🔥 MÁS PEQUEÑO EN CELULAR
         this.size =
           window.innerWidth < 768
             ? Math.random() * 2 + 9
@@ -88,11 +101,52 @@ export default function Love4() {
           this.opacity += 0.009;
         }
 
+        // 🔥 HACER CAER MUCHOS
+        if (
+          heartCompleted &&
+          this.falling &&
+          frame > this.delay + 120
+        ) {
+          const surfaceY =
+            window.innerHeight -
+            bloodLevel -
+            10;
+
+          // CAER
+          if (!this.landed) {
+            this.y += this.speedY;
+
+            if (
+              this.y >= surfaceY
+            ) {
+              this.y = surfaceY;
+
+              this.landed = true;
+            }
+          } else {
+            // FLOTAR
+            this.y =
+              surfaceY +
+              Math.sin(
+                frame * 0.05 +
+                  this.x * 0.02
+              ) *
+                5;
+
+            this.x +=
+              Math.sin(
+                frame * 0.01 +
+                  this.y
+              ) * 0.3;
+          }
+        }
+
         ctx.font = `bold ${this.size}px Arial`;
 
         ctx.fillStyle = `rgba(255,60,60,${this.opacity})`;
 
         ctx.shadowColor = "#ff0000";
+
         ctx.shadowBlur = 8;
 
         ctx.fillText(
@@ -155,10 +209,10 @@ export default function Love4() {
           window.innerHeight -
             bloodLevel
         ) {
-        bloodLevel +=
-  window.innerWidth < 768
-    ? 3 // 📱 celular
-    : 0.7; // 💻 pc
+          bloodLevel +=
+            window.innerWidth < 768
+              ? 0.7
+              : 0.7;
 
           if (
             bloodLevel >
@@ -182,7 +236,6 @@ export default function Love4() {
       const centerY =
         window.innerHeight / 2;
 
-      // 🔥 ESCALA RESPONSIVE
       const baseScale =
         window.innerWidth < 768
           ? Math.min(
@@ -194,7 +247,6 @@ export default function Love4() {
               window.innerHeight
             ) * 0.035;
 
-      // 🔥 MENOS TEXTO EN CELULAR
       const total =
         window.innerWidth < 768
           ? 45
@@ -389,8 +441,7 @@ export default function Love4() {
           particles.forEach((p) => {
             if (
               Math.random() <
-                0.004 &&
-              Math.random() < 0.4
+              0.004
             ) {
               tears.push(
                 new Tear(
@@ -413,7 +464,7 @@ export default function Love4() {
         tears[i].update(i);
       }
 
-      // TEXTO CENTRAL RESPONSIVE
+      // TEXTO CENTRAL
       ctx.textAlign = "center";
 
       const textSize =
