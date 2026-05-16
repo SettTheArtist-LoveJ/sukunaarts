@@ -188,8 +188,8 @@ export default function Love4() {
 
       ctx.fillText(
         "I LOVE YOU",
-        canvas.width / 2,
-        canvas.height / 2
+      canvas.width / 2 - 25,
+      canvas.height / 2
       );
 
       ctx.restore();
