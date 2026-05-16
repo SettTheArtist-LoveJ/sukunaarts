@@ -52,7 +52,6 @@ export default function Love4() {
       ) {
         this.x = x;
         this.y = y;
-
         this.delay = delay;
       }
 
@@ -66,7 +65,6 @@ export default function Love4() {
 
         ctx.save();
 
-        // MISMO TAMAÑO
         ctx.font =
           "bold 18px Arial";
 
@@ -101,96 +99,81 @@ export default function Love4() {
           canvas.height
         ) * 0.028;
 
-      const heartLayers = 6;
+      const heartLayers = 7;
 
       for (
         let layer = 0;
         layer < heartLayers;
         layer++
       ) {
+        // CADA CAPA MÁS
+        // ADENTRO
         const scale =
           baseScale *
-          (1 - layer * 0.14);
+          (1 - layer * 0.11);
 
-        // MENOS TEXTOS
-        // MIENTRAS MÁS
-        // AL CENTRO
-        const total =
-          220 - layer * 35;
+        const total = 180;
 
-        // MÁS DISTANCIA
-        // ENTRE TEXTOS
-        const step = 3;
+        // DESFASE PARA
+        // TAPAR ESPACIOS
+        const offset =
+          layer % 2 === 0
+            ? 0
+            : 0.5;
 
         for (
-          let sideIndex = 0;
-          sideIndex <
-          total / 2;
-          sideIndex += step
+          let i = 0;
+          i < total;
+          i += 4
         ) {
-          const leftT =
-            (sideIndex / total) *
-            Math.PI *
-            2;
-
-          const rightT =
-            ((total - sideIndex) /
+          // DESPLAZA LA
+          // SIGUIENTE FILA
+          // ENTRE LOS HUECOS
+          const t =
+            ((i + offset * 4) /
               total) *
             Math.PI *
             2;
 
-          const sides = [
-            leftT,
-            rightT,
-          ];
-
-          sides.forEach((t) => {
-            const x =
-              16 *
-              Math.pow(
-                Math.sin(t),
-                3
-              );
-
-            const y =
-              -(
-                13 * Math.cos(t) -
-                5 *
-                  Math.cos(2 * t) -
-                2 *
-                  Math.cos(3 * t) -
-                Math.cos(4 * t)
-              );
-
-            // MÁS LIMPIO
-            let randomOffset = 6;
-
-            if (layer === 0) {
-              randomOffset = 1;
-            }
-
-            const delay =
-              layer * 40 +
-              sideIndex * 1.5;
-
-            particles.push(
-              new Particle(
-                centerX +
-                  x * scale +
-                  (Math.random() -
-                    0.5) *
-                    randomOffset,
-
-                centerY +
-                  y * scale +
-                  (Math.random() -
-                    0.5) *
-                    randomOffset,
-
-                delay
-              )
+          const x =
+            16 *
+            Math.pow(
+              Math.sin(t),
+              3
             );
-          });
+
+          const y =
+            -(
+              13 * Math.cos(t) -
+              5 *
+                Math.cos(2 * t) -
+              2 *
+                Math.cos(3 * t) -
+              Math.cos(4 * t)
+            );
+
+          // PEQUEÑO AJUSTE
+          // PARA SUPERPONER
+          // LAS LETRAS
+          const overlap =
+            layer * 1.8;
+
+          const delay =
+            layer * 35 +
+            i * 1.2;
+
+          particles.push(
+            new Particle(
+              centerX +
+                x * scale -
+                overlap,
+
+              centerY +
+                y * scale,
+
+              delay
+            )
+          );
         }
       }
     }
@@ -212,7 +195,7 @@ export default function Love4() {
         canvas.height
       );
 
-      // LUZ ROJA
+      // GLOW CENTRAL
       const glow =
         ctx.createRadialGradient(
           canvas.width / 2 +
@@ -310,7 +293,6 @@ export default function Love4() {
 
     if (started) {
       frame = 0;
-
       createHeart();
     }
 
@@ -323,8 +305,7 @@ export default function Love4() {
 
     return () => {
       cancelAnimationFrame(
-        animationId
-      );
+        animationId);
 
       window.removeEventListener(
         "resize",
