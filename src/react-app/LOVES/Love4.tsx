@@ -107,7 +107,7 @@ export default function Love4() {
 
         // APARICIÓN ALEATORIA
         const delay =
-          Math.random() * 350;
+          Math.random() * 250;
 
         particles.push(
           new Particle(
