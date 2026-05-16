@@ -2,6 +2,7 @@ import { useState } from "react";
 import Love1 from "./LOVES/Love1";
 import Love2 from "./LOVES/Love2";
 import Love3 from "./LOVES/Love3";
+import Love4 from "./LOVES/Love3";
 
 export default function Secret() {
   const [date, setDate] = useState("");
@@ -176,6 +177,7 @@ export default function Secret() {
               {openBox === 1 && <Love1 />}
               {openBox === 2 && <Love2 />}
               {openBox === 3 && <Love3 />}
+              {openBox === 4 && <Love4 />}
             </div>
           </div>
         )}
