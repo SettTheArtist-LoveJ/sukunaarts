@@ -180,8 +180,7 @@ export default function Love4() {
 
             // MÁS PEQUEÑOS
             // HACIA EL CENTRO
-            const size =
-              11 - layer * 1.4;
+            const size = 9;
 
             particles.push(
               new Particle(
