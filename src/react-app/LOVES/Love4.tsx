@@ -41,7 +41,6 @@ export default function Love4() {
       progress: number;
 
       constructor(tx: number, ty: number, angle: number, radius: number) {
-        // empiezan desde el centro
         this.x = canvas.width / 2;
         this.y = canvas.height / 2;
 
@@ -54,7 +53,8 @@ export default function Love4() {
         this.angle = angle;
         this.radius = radius;
 
-        this.size = Math.random() * 2 + 9;
+        // TEXTO MÁS GRANDE
+        this.size = Math.random() * 4 + 12;
 
         this.speed = Math.random() * 0.015 + 0.01;
 
@@ -66,12 +66,12 @@ export default function Love4() {
       draw() {
         ctx.save();
 
-        ctx.font = `${this.size}px Arial`;
+        ctx.font = `bold ${this.size}px Arial`;
 
         ctx.fillStyle = `rgba(255,190,220,${this.opacity})`;
 
         ctx.shadowColor = "#ff5fa2";
-        ctx.shadowBlur = 12;
+        ctx.shadowBlur = 14;
 
         ctx.fillText("I love you", this.x, this.y);
 
@@ -83,7 +83,6 @@ export default function Love4() {
 
         if (this.progress > 1) this.progress = 1;
 
-        // movimiento remolino
         const spiral =
           (1 - this.progress) * this.radius;
 
@@ -112,18 +111,17 @@ export default function Love4() {
     function createHeart() {
       particles.length = 0;
 
-      // MÁS A LA IZQUIERDA PARA CENTRAR VISUALMENTE
-      const centerX = canvas.width / 2 - 35;
+      // MÁS A LA IZQUIERDA
+      const centerX = canvas.width / 2 - 55;
 
-      // centro vertical
       const centerY = canvas.height / 2;
 
-      // CORAZÓN MÁS GRANDE
+      // MÁS GRANDE
       const scale =
-        Math.min(canvas.width, canvas.height) * 0.028;
+        Math.min(canvas.width, canvas.height) * 0.03;
 
-      // MÁS PARTÍCULAS
-      const total = 260;
+      // MENOS PARTÍCULAS PARA MÁS ESPACIO
+      const total = 170;
 
       for (let i = 0; i < total; i++) {
         const t = (i / total) * Math.PI * 2;
@@ -175,11 +173,11 @@ export default function Love4() {
       ctx.fillStyle = "#ffffff";
 
       ctx.shadowColor = "#ff2e88";
-      ctx.shadowBlur = 30;
+      ctx.shadowBlur = 35;
 
       ctx.fillText(
         "I LOVE YOU",
-        canvas.width / 2 - 35,
+        canvas.width / 2 - 55,
         canvas.height / 2
       );
 
