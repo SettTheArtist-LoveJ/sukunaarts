@@ -524,7 +524,7 @@ export default function Love4() {
                   : 18,
             }}
           >
-            TOCA EL CORAZÓN
+            HAZ CLICK
           </span>
 
           <button
