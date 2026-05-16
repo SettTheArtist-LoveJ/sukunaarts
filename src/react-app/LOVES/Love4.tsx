@@ -36,9 +36,10 @@ export default function Love4() {
       constructor(
         x: number,
         y: number,
-        delay: number
+        delay: number,
+        size: number
       ) {
-        // PEQUEÑO DESORDEN PARA QUE CHOQUEN
+        // DESORDEN PARA QUE CHOQUEN
         this.x =
           x + (Math.random() - 0.5) * 18;
 
@@ -47,7 +48,8 @@ export default function Love4() {
 
         this.delay = delay;
 
-        this.size = Math.random() * 2 + 9;
+        // TAMAÑO VARIABLE
+        this.size = size;
       }
 
       update(frame: number) {
@@ -101,7 +103,7 @@ export default function Love4() {
         layer < heartLayers;
         layer++
       ) {
-        // MÁS JUNTOS PARA QUE SE TOQUEN
+        // MÁS JUNTOS
         const scale =
           baseScale * (1 - layer * 0.14);
 
@@ -125,11 +127,16 @@ export default function Love4() {
             Math.random() * 100 +
             layer * 20;
 
+          // MÁS PEQUEÑOS HACIA EL CENTRO
+          const size =
+            11 - layer * 1.3;
+
           particles.push(
             new Particle(
               centerX + x * scale,
               centerY + y * scale,
-              delay
+              delay,
+              size
             )
           );
         }
