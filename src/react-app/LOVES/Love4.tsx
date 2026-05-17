@@ -6,12 +6,28 @@ export default function Love4() {
 
   const [started, setStarted] =
     useState(false);
+    const audioRef =
+  useRef<HTMLAudioElement | null>(
+    null
+  );
 
   const startedRef = useRef(false);
 
   useEffect(() => {
     startedRef.current = started;
   }, [started]);
+  useEffect(() => {
+  if (
+    started &&
+    audioRef.current
+  ) {
+    audioRef.current.volume = 0.5;
+
+    audioRef.current
+      .play()
+      .catch(() => {});
+  }
+}, [started]);
 
   useEffect(() => {
     const canvas = canvasRef.current!;
@@ -537,7 +553,12 @@ export default function Love4() {
           height: "100%",
         }}
       />
-
+<audio ref={audioRef} loop>
+  <source
+    src="/reddddd.mp3"
+    type="audio/mpeg"
+  />
+</audio>
       {!started && (
         <div
           style={{
